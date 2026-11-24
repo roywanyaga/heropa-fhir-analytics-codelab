@@ -17,14 +17,19 @@ status building
 cd "$CODELAB_DIR/dashboard"
 bash scripts/clear_data_cache.sh
 
-# Use the database once the pipeline has filled it. Before that, build the
-# empty state, which tells the learner to run the pipeline.
-if [[ "$(psql -X -q -w -t -A -c "SELECT count(*) FROM patient_flat" 2>/dev/null || echo 0)" -gt 0 ]]; then
+# Use the database once the pipeline has made all six tables the dashboard
+# reads and the patient table holds rows. The pipeline makes the tables one
+# resource type after another, so a build in the middle of a run would fail on a
+# table that is not there yet. Until then, build the empty state.
+need="patient_flat group_flat encounter_flat condition_flat observation_flat immunization_flat"
+have_tables="$(psql -X -q -w -t -A -c "SELECT count(*) FROM pg_tables WHERE schemaname='public' AND tablename IN ('patient_flat','group_flat','encounter_flat','condition_flat','observation_flat','immunization_flat')" 2>/dev/null || echo 0)"
+patients="$(psql -X -q -w -t -A -c "SELECT count(*) FROM patient_flat" 2>/dev/null || echo 0)"
+if [[ "${have_tables:-0}" -eq 6 && "${patients:-0}" -gt 0 ]]; then
   export LAB_SAMPLE=0
   echo "[$(date +%T)] Building the dashboard from the analytics database" >> "$LOG"
 else
   export LAB_SAMPLE=empty
-  echo "[$(date +%T)] The pipeline has not filled the tables yet, so the dashboard shows an empty state" >> "$LOG"
+  echo "[$(date +%T)] The pipeline has not made all the tables yet ($have_tables of 6), so the dashboard shows an empty state" >> "$LOG"
 fi
 
 if npx observable build >> "$LOG" 2>&1; then
