@@ -27,7 +27,7 @@ SOURCE = ROOT / "course-manual.md"
 OUT = ROOT / "heropa-html"
 
 TABLE = "border-collapse: collapse; width: 100%; margin-bottom: 16px;"
-TH = "border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;"
+TH = "border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;"
 TD = "border: 1px solid #333; padding: 8px;"
 PRE = "background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"
 # Heropa's own stylesheet lets text inside code wrap, which joins the lines of
@@ -104,6 +104,19 @@ def convert(markdown):
     return page
 
 
+# Heading colours from the Open Health Stack identity: the top level is the
+# deep purple, the second level the logo purple, the third its teal.
+HEADINGS = {"h1": "#4b3a8c", "h2": "#625cab", "h3": "#43799b", "h4": "#413b75"}
+
+
+def paint(page):
+    """Writes the heading colours on the elements. Done last, because the
+    section split looks for a bare <h2>."""
+    for tag, colour in HEADINGS.items():
+        page = page.replace(f"<{tag}>", f'<{tag} style="color: {colour};">')
+    return page
+
+
 def slug(title):
     return re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
 
@@ -114,7 +127,7 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     (OUT / "sections").mkdir(parents=True)
-    (OUT / "course-manual.html").write_text(page, encoding="utf-8")
+    (OUT / "course-manual.html").write_text(paint(page), encoding="utf-8")
 
     # One file for each part that starts at a second level heading. The part
     # before the first one holds the title and the introduction.
@@ -124,7 +137,7 @@ def main():
         title = plain(heading.group(1)) if heading else "introduction"
         title = re.sub(r"^\d+\.\s+", "", title)
         name = f"{number:02d}-{slug(title)}.html"
-        (OUT / "sections" / name).write_text(part.strip() + "\n", encoding="utf-8")
+        (OUT / "sections" / name).write_text(paint(part.strip()) + "\n", encoding="utf-8")
         print(f"  sections/{name}")
 
     print(f"Wrote {OUT.relative_to(ROOT)}/course-manual.html and {len(parts)} sections")

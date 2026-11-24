@@ -1,13 +1,13 @@
-<h2>5. Watch the dashboard fill</h2>
+<h2 style="color: #625cab;">5. Watch the dashboard fill</h2>
 <p>Switch to the Dashboard tab. You do not have to do anything. About 30 seconds after the flat tables change, the lab rebuilds the dashboard, and the tab reloads by itself. The page now shows patients, households, visits and vaccine doses, three charts, and a bar chart of the rows in each flat table. The Immunization page shows the vaccine doses.</p>
 <p>If you do not want to wait, click <strong>Refresh dashboard</strong> at the bottom of the Editor, or type <code>refresh</code> in the Terminal.</p>
-<h3>How the dashboard reads the tables</h3>
+<h3 style="color: #43799b;">How the dashboard reads the tables</h3>
 <p>Observable Framework builds a static site. Each file in <code>dashboard/src/data</code> that ends in <code>.csv.sh</code> is a data loader. When the site is built, the loader runs a SQL query and prints a CSV, and the page reads it with <code>FileAttachment</code>.</p>
 <ol>
 <li>Open <code>dashboard/src/data/gender_age.csv.sh</code>. It is a SQL query over <code>patient_flat</code> that groups patients by gender and age group.</li>
 <li>Open <code>dashboard/src/index.md</code>. The first block loads each CSV. The lines below it draw them with the helpers in <code>components/charts.js</code>.</li>
 </ol>
-<h3>Change a query</h3>
+<h3 style="color: #43799b;">Change a query</h3>
 <ol>
 <li>In <code>gender_age.csv.sh</code>, make three small changes so that the second group becomes ages 5 to 17 and the third starts at 18.
 <ul>

@@ -1,4 +1,4 @@
-<h2>4. What the pipeline does</h2>
+<h2 style="color: #625cab;">4. What the pipeline does</h2>
 <p>FHIR Data Pipes is a set of pipelines that turn nested FHIR resources into flat tables, so that ordinary SQL and dashboard tools can use them. It has three parts you will meet.</p>
 <ul>
 <li><strong>The pipeline</strong> reads the resources from the FHIR server and writes the tables.</li>
@@ -6,7 +6,7 @@
 <li><strong>ViewDefinitions</strong> say which fields become which columns. They are FHIR resources too, written to the SQL on FHIR standard, so you change what a table holds by editing a JSON file and not by writing code.</li>
 </ul>
 <p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MjAgMzMwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkEgbmVzdGVkIFBhdGllbnQgcmVzb3VyY2UgYmVjb21lcyB0d28gcm93cyBvZiBhIGZsYXQgdGFibGUgYmVjYXVzZSBpdCBoYXMgdHdvIG5hbWVzIj4KICA8c3R5bGU+CiAgICB0ZXh0IHsgZm9udC1mYW1pbHk6IEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7IGZpbGw6ICMxYjFiMWI7IH0KICAgIC50IHsgZm9udC1zaXplOiAxNXB4OyBmb250LXdlaWdodDogNzAwOyB9CiAgICAubSB7IGZvbnQtZmFtaWx5OiAiQ291cmllciBOZXciLCBtb25vc3BhY2U7IGZvbnQtc2l6ZTogMTIuNXB4OyB9CiAgICAucyB7IGZvbnQtc2l6ZTogMTIuNXB4OyBmaWxsOiAjNTU1OyB9CiAgICAuaCB7IGZvbnQtc2l6ZTogMTIuNXB4OyBmb250LXdlaWdodDogNzAwOyB9CiAgICAuYm94IHsgZmlsbDogI2ZmZjsgc3Ryb2tlOiAjY2ZjZmNhOyBzdHJva2Utd2lkdGg6IDEuNTsgfQogICAgLmFycm93IHsgc3Ryb2tlOiAjNzc3OyBzdHJva2Utd2lkdGg6IDI7IGZpbGw6IG5vbmU7IG1hcmtlci1lbmQ6IHVybCgjYWgpOyB9CiAgPC9zdHlsZT4KICA8ZGVmcz48bWFya2VyIGlkPSJhaCIgdmlld0JveD0iMCAwIDEwIDEwIiByZWZYPSI5IiByZWZZPSI1IiBtYXJrZXJXaWR0aD0iOCIgbWFya2VySGVpZ2h0PSI4IiBvcmllbnQ9ImF1dG8iPjxwYXRoIGQ9Ik0wIDBMMTAgNUwwIDEweiIgZmlsbD0iIzc3NyIvPjwvbWFya2VyPjwvZGVmcz4KICA8cmVjdCB3aWR0aD0iOTIwIiBoZWlnaHQ9IjMzMCIgZmlsbD0iI2Y4ZmFmOSIvPgoKICA8dGV4dCBjbGFzcz0idCIgeD0iMjAiIHk9IjI4Ij4xLiBBIEZISVIgcmVzb3VyY2UgKG5lc3RlZCBKU09OKTwvdGV4dD4KICA8cmVjdCBjbGFzcz0iYm94IiB4PSIyMCIgeT0iNDAiIHdpZHRoPSIyNzAiIGhlaWdodD0iMjUwIiByeD0iMTAiLz4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjY2Ij57ICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iODYiPiAgImlkIjogInAxIiw8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIxMDYiPiAgImdlbmRlciI6ICJmZW1hbGUiLDwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjEyNiI+ICAiYmlydGhEYXRlIjogIjIwMjEtMDQtMDkiLDwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjE0NiI+ICAibmFtZSI6IFs8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIxNjYiPiAgICB7ICJmYW1pbHkiOiAiRGFyYSIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMTg2Ij4gICAgICAiZ2l2ZW4iOiBbIkFtaW5hIl0gfSw8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIyMDYiPiAgICB7ICJmYW1pbHkiOiAiRGFyYSIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMjI2Ij4gICAgICAiZ2l2ZW4iOiBbIk1pbmEiXSB9PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMjQ2Ij4gIF08L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIyNjYiPn08L3RleHQ+CgogIDx0ZXh0IGNsYXNzPSJ0IiB4PSIzMzAiIHk9IjI4Ij4yLiBBIFZpZXdEZWZpbml0aW9uPC90ZXh0PgogIDxyZWN0IGNsYXNzPSJib3giIHg9IjMzMCIgeT0iNDAiIHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiByeD0iMTAiLz4KICA8cmVjdCB4PSIzMzAiIHk9IjQwIiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjNDM3OTliIi8+CiAgPHRleHQgY2xhc3M9InMiIHg9IjM0NCIgeT0iNzIiPnJlc291cmNlOiBQYXRpZW50PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjEwMCI+Q29sdW1ucyB0YWtlbiBvbmNlOjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQ0IiB5PSIxMjAiPmlkICAgICAgICAgLT4gaWQ8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0NCIgeT0iMTQwIj5nZW5kZXIgICAgIC0+IGdlbmRlcjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQ0IiB5PSIxNjAiPmJpcnRoRGF0ZSAgLT4gYmlydGhfZGF0ZTwvdGV4dD4KICA8dGV4dCBjbGFzcz0icyIgeD0iMzQ0IiB5PSIxOTIiPkZvciBlYWNoIG5hbWU6PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNDQiIHk9IjIxMiI+ZmFtaWx5ICAgICAtPiBmYW1pbHk8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0NCIgeT0iMjMyIj5naXZlblswXSAgIC0+IGdpdmVuPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjI2NiI+QSB3aGVyZSBsaW5lIGtlZXBzIG9ubHkgdGhlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjI4MiI+cmVzb3VyY2VzIHlvdSB3YW50LjwvdGV4dD4KCiAgPHRleHQgY2xhc3M9InQiIHg9IjYyMCIgeT0iMjgiPjMuIEEgZmxhdCB0YWJsZSAoU1FMKTwvdGV4dD4KICA8cmVjdCBjbGFzcz0iYm94IiB4PSI2MjAiIHk9IjQwIiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjEzMCIgcng9IjEwIi8+CiAgPHJlY3QgeD0iNjIwIiB5PSI0MCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIzMCIgcng9IjEwIiBmaWxsPSIjZjFmMGVjIi8+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjYzMiIgeT0iNjAiPmlkPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJoIiB4PSI2NjUiIHk9IjYwIj5nZW5kZXI8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjcyNSIgeT0iNjAiPmJpcnRoX2RhdGU8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjgwNSIgeT0iNjAiPmdpdmVuPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI2MzIiIHk9Ijk1Ij5wMTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iNjY1IiB5PSI5NSI+ZmVtYWxlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI3MjUiIHk9Ijk1Ij4yMDIxLTA0LTA5PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI4MDUiIHk9Ijk1Ij5BbWluYTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iNjMyIiB5PSIxMzAiPnAxPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI2NjUiIHk9IjEzMCI+ZmVtYWxlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI3MjUiIHk9IjEzMCI+MjAyMS0wNC0wOTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iODA1IiB5PSIxMzAiPk1pbmE8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjYyMCIgeT0iMTk4Ij5Ud28gbmFtZXMgbWFrZSB0d28gcm93cy4gVGhpcyBpcyB3aHkgdGhlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI2MjAiIHk9IjIxNiI+ZGFzaGJvYXJkIGNvdW50cyBkaXN0aW5jdCBpZHM6IGl0IHdvdWxkPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI2MjAiIHk9IjIzNCI+b3RoZXJ3aXNlIGNvdW50IHRoaXMgcGF0aWVudCB0d2ljZS48L3RleHQ+CgogIDxwYXRoIGNsYXNzPSJhcnJvdyIgZD0iTTI5MiAxNjVIMzI2Ii8+CiAgPHBhdGggY2xhc3M9ImFycm93IiBkPSJNNTgyIDEwNUg2MTYiLz4KPC9zdmc+Cg==" alt="A nested Patient resource with two names becomes two rows of a flat table" style="max-width: 100%; height: auto; border: 1px solid #ddd;" /></p>
-<h3>Look at a ViewDefinition</h3>
+<h3 style="color: #43799b;">Look at a ViewDefinition</h3>
 <p>Open <code>pipeline/config/views/patient_flat_view.json</code> in the Editor.</p>
 <ul>
 <li><code>&quot;resource&quot;: &quot;Patient&quot;</code> says which resource type the view reads.</li>
@@ -15,7 +15,7 @@
 <li>A <code>forEachOrNull</code> makes one row for each item in a list, here each name. A patient with two names gets two rows, which is why the dashboard counts distinct ids.</li>
 </ul>
 <p>The lab has one view for each of 13 resource types. They are listed in <code>pipeline/config/application.yaml</code>.</p>
-<h3>Run the pipeline from the Pipelines tab</h3>
+<h3 style="color: #43799b;">Run the pipeline from the Pipelines tab</h3>
 <ol>
 <li>
 <p>Click <strong>Pipelines</strong> at the bottom of the Editor.</p>
@@ -30,11 +30,11 @@
 <p>Run it again every half minute. The flat table column fills in, one resource type after another, until it matches the FHIR server column.</p>
 </li>
 </ol>
-<h3>Or run it from the terminal</h3>
+<h3 style="color: #43799b;">Or run it from the terminal</h3>
 <p>The Terminal can start the same run and follow it for you.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline
 </code></pre>
-<h3>Look at the tables</h3>
+<h3 style="color: #43799b;">Look at the tables</h3>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">psql -c &quot;\dt&quot;
 psql -c &quot;SELECT gender, count(DISTINCT id) FROM patient_flat GROUP BY gender&quot;
 </code></pre>

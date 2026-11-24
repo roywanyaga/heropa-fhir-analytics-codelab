@@ -9,7 +9,7 @@
   --ink-3: #6f7779;
   --line: #e2e6e5;
   --blue: #625cab;
-  --brand-dark: #413b75;
+  --brand-dark: #4b3a8c;
   --teal: #43799b;
   --blue-soft: #efeef8;
   --radius: 14px;
@@ -40,7 +40,7 @@ body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
 /* Cards that hold a chart */
 .grid { gap: 14px !important; margin: 0 0 14px; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px 10px; margin: 0; }
-.card h2 { margin: 0 0 2px; font-size: 1rem; font-weight: 600; max-width: none; }
+.card h2 { margin: 0 0 2px; font-size: 1rem; font-weight: 600; max-width: none; color: var(--blue); }
 .card .hint { margin: 0 0 6px; color: var(--ink-2); font-size: 0.85rem; max-width: none; }
 .card svg { max-width: 100%; }
 .card figure { margin: 0; }
@@ -53,3 +53,7 @@ body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
 
 .note { font-size: 0.88rem; color: var(--ink-2); max-width: none; margin-top: 18px; }
 .fresh { font-size: 0.8rem; color: var(--ink-3); margin: 0 0 6px; max-width: none; }
+
+/* Table headers, as in the guide */
+table thead th, .card table th { background: var(--brand-dark); color: #fff; font-weight: 600; border-bottom: none; }
+table thead th a, table thead th button { color: #fff; }
