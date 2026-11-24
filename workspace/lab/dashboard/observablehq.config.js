@@ -9,7 +9,6 @@ export default {
     {name: "Immunization", path: "/immunization"}
   ],
   style: "style.css",
-  theme: "air",
   footer: "Open Health Stack Software Foundation. Built from the analytics database that FHIR Data Pipes fills.",
   sidebar: false,
   toc: false,

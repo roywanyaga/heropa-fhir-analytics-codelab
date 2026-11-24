@@ -12,7 +12,7 @@ const enrolments = await FileAttachment("data/enrolments_month.csv").csv({typed:
 const tables = await FileAttachment("data/tables.csv").csv({typed: true});
 const built = (await FileAttachment("data/built.csv").csv())[0].built;
 const empty = kpis.every((k) => Number(k.value) === 0);
-const accents = ["#625cab", "#43799b", "#413b75", "#6f7779"];
+const accents = [];
 ```
 
 <img class="logo" src="./assets/ohs-logo.png" alt="Open Health Stack Software Foundation">

@@ -1,11 +1,11 @@
 // Chart helpers, so the pages stay short and every chart looks the same.
-// The colours are the first six slots of one validated categorical palette,
-// always used in this order. The pale ones (aqua, yellow, pink) fall below 3:1
+// A calm six colour set, always used in this order. It passes the colour
+// checks for lightness, chroma and colour blind separation. The pale ones (aqua, yellow, pink) fall below 3:1
 // contrast on the white card, so every chart with more than one series has a
 // legend, bars carry hover tips, and the data is also shown as a table.
 import * as Plot from "npm:@observablehq/plot";
 
-export const PALETTE = ["#625cab", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"];
+export const PALETTE = ["#625cab", "#cf7a4f", "#1f9d88", "#c9a23a", "#b56a96", "#6b8f47"];
 const INK = "#4c5456";
 
 const base = {

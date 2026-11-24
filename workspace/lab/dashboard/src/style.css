@@ -1,3 +1,8 @@
+/* The lab dashboard. A custom style sheet replaces Observable's own theme, so
+   the two imports below bring it back before the lab's colours go on top. */
+@import url("observablehq:default.css");
+@import url("observablehq:theme-air.css");
+
 /* The lab dashboard. One light theme, so every colour in charts.js is
    checked against the same surface. */
 :root {
@@ -16,7 +21,8 @@
   --theme-foreground-focus: var(--blue);
 }
 html, body { background: var(--surface); color: var(--ink); }
-body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+body, h1, h2, h3, h4, p, table, input, button { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+#observablehq-center, #observablehq-main, #observablehq-footer { max-width: 1180px !important; margin-left: auto; margin-right: auto; }
 #observablehq-main { max-width: 1180px; margin: 0 auto; padding: 8px 20px 32px; }
 #observablehq-header { display: none; }
 #observablehq-footer { color: var(--ink-3); font-size: 12px; border-top: 1px solid var(--line); margin-top: 32px; }
@@ -33,13 +39,13 @@ body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
 /* Big numbers */
 .kpis { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin: 18px 0 14px; }
 .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px 14px; position: relative; overflow: hidden; }
-.kpi::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent, var(--blue)); }
+.kpi::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: #b3aee6; }
 .kpi .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); margin: 0; }
-.kpi .big { display: block; font-size: 2.3rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.15; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.kpi .big { display: block; color: var(--brand-dark); font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
 /* Cards that hold a chart */
 .grid { gap: 14px !important; margin: 0 0 14px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px 10px; margin: 0; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px 12px; margin: 0; box-shadow: 0 1px 2px rgba(25,31,33,.04); }
 .card h2 { margin: 0 0 2px; font-size: 1rem; font-weight: 600; max-width: none; color: var(--blue); }
 .card .hint { margin: 0 0 6px; color: var(--ink-2); font-size: 0.85rem; max-width: none; }
 .card svg { max-width: 100%; }
