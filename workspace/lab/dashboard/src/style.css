@@ -1,14 +1,17 @@
 /* The lab dashboard. One light theme, so every colour in charts.js is
    checked against the same surface. */
 :root {
-  --surface: #fcfcfb;
+  /* Colours taken from the Open Health Stack logo */
+  --surface: #f8faf9;
   --card: #ffffff;
-  --ink: #0b0b0b;
-  --ink-2: #52514e;
-  --ink-3: #8a8985;
-  --line: #e7e6e2;
-  --blue: #2a78d6;
-  --blue-soft: #e8f1fc;
+  --ink: #191f21;
+  --ink-2: #4c5456;
+  --ink-3: #6f7779;
+  --line: #e2e6e5;
+  --blue: #625cab;
+  --brand-dark: #413b75;
+  --teal: #43799b;
+  --blue-soft: #efeef8;
   --radius: 14px;
   --theme-foreground-focus: var(--blue);
 }
@@ -18,13 +21,14 @@ body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
 #observablehq-header { display: none; }
 #observablehq-footer { color: var(--ink-3); font-size: 12px; border-top: 1px solid var(--line); margin-top: 32px; }
 
-/* Page header with the two page links */
+/* Page header: logo, title and the two page links */
+.logo { display: block; height: 52px; width: auto; margin: 18px 0 0 -6px; }
 .top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 28px 0 8px; }
-.top h1 { margin: 0; font-size: 1.7rem; letter-spacing: -0.01em; max-width: none; }
+.top h1 { margin: 0; font-size: 1.7rem; letter-spacing: -0.01em; max-width: none; color: var(--brand-dark); }
 .top .sub { margin: 2px 0 0; color: var(--ink-2); font-size: 0.95rem; }
-.tabs { display: flex; gap: 6px; background: #efeeea; padding: 4px; border-radius: 999px; }
+.tabs { display: flex; gap: 6px; background: #e8e9ee; padding: 4px; border-radius: 999px; }
 .tabs a { padding: 6px 16px; border-radius: 999px; color: var(--ink-2); font-weight: 500; font-size: 0.9rem; text-decoration: none; }
-.tabs a.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.tabs a.on { background: var(--brand-dark); color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.18); }
 
 /* Big numbers */
 .kpis { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin: 18px 0 14px; }
@@ -43,7 +47,7 @@ body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
 .card table { font-size: 0.88rem; }
 
 /* Message shown before the pipeline has run */
-.empty { background: var(--blue-soft); border: 1px solid #b7d3f6; border-radius: var(--radius); padding: 16px 20px; margin: 18px 0; }
+.empty { background: var(--blue-soft); border: 1px solid #cfcce8; border-radius: var(--radius); padding: 16px 20px; margin: 18px 0; }
 .empty strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
 .empty p { margin: 0; max-width: none; color: var(--ink-2); }
 

@@ -9,7 +9,7 @@
     .arrow { stroke: #777; stroke-width: 2; fill: none; marker-end: url(#ah); }
   </style>
   <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#777"/></marker></defs>
-  <rect width="920" height="330" fill="#fcfcfb"/>
+  <rect width="920" height="330" fill="#f8faf9"/>
 
   <text class="t" x="20" y="28">1. A FHIR resource (nested JSON)</text>
   <rect class="box" x="20" y="40" width="270" height="250" rx="10"/>
@@ -27,7 +27,7 @@
 
   <text class="t" x="330" y="28">2. A ViewDefinition</text>
   <rect class="box" x="330" y="40" width="250" height="250" rx="10"/>
-  <rect x="330" y="40" width="250" height="6" rx="3" fill="#eb6834"/>
+  <rect x="330" y="40" width="250" height="6" rx="3" fill="#43799b"/>
   <text class="s" x="344" y="72">resource: Patient</text>
   <text class="s" x="344" y="100">Columns taken once:</text>
   <text class="m" x="344" y="120">id         -> id</text>

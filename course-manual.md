@@ -1,3 +1,5 @@
+![Open Health Stack Software Foundation](images/ohs-logo.png)
+
 # Analytics on FHIR with FHIR Data Pipes and Observable Framework
 
 This guide takes you through the analytics codelab on the Heropa lab. You look at FHIR data on a FHIR server, run the FHIR Data Pipes pipeline, and watch a dashboard built with Observable Framework fill with numbers. Then you change a ViewDefinition and add more data, and watch the dashboard follow. You install nothing.

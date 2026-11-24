@@ -91,12 +91,13 @@ def convert(markdown):
     page = re.sub(r"<th(?: style=\"[^\"]*\")?>", f'<th style="{TH}">', page)
     page = re.sub(r"<td(?: style=\"[^\"]*\")?>", f'<td style="{TD}">', page)
     page = re.sub(r"<pre><code(?: class=\"[^\"]*\")?>", f'<pre style="{PRE}"><code style="{CODE}">', page)
-    # The diagrams are SVG files that sit in guide-images. Heropa has no place to
+    # The diagrams and the logo are files that sit in guide-images. Heropa has no place to
     # host them, so each one is written into the page as a data address.
     def diagram(match):
         name = pathlib.Path(match.group(1)).name
         data = base64.b64encode((ROOT / "guide-images" / name).read_bytes()).decode()
-        return f'<img src="data:image/svg+xml;base64,{data}" {match.group(2)}'
+        kind = "svg+xml" if name.endswith(".svg") else "png"
+        return f'<img src="data:image/{kind};base64,{data}" {match.group(2)}'
 
     page = re.sub(r'<img src="images/([^"]+)" ([^>]*?)(?= ?/?>)', diagram, page)
     page = re.sub(r"<img ([^>]*?) ?/?>", rf'<img \1 style="{IMG}" />', page)

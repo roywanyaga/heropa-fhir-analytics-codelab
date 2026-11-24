@@ -8,31 +8,31 @@
     .arrow { stroke: #777; stroke-width: 2; fill: none; marker-end: url(#ah); }
   </style>
   <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#777"/></marker></defs>
-  <rect width="920" height="300" fill="#fcfcfb"/>
+  <rect width="920" height="300" fill="#f8faf9"/>
 
   <rect class="box" x="20" y="70" width="190" height="130" rx="12"/>
-  <rect x="20" y="70" width="190" height="6" rx="3" fill="#2a78d6"/>
+  <rect x="20" y="70" width="190" height="6" rx="3" fill="#625cab"/>
   <text class="t" x="115" y="108" text-anchor="middle">FHIR server</text>
   <text class="s" x="115" y="130" text-anchor="middle">HAPI FHIR</text>
   <text class="s" x="115" y="152" text-anchor="middle">Patient, Encounter,</text>
   <text class="s" x="115" y="170" text-anchor="middle">Immunization ... as JSON</text>
 
   <rect class="box" x="265" y="70" width="190" height="130" rx="12"/>
-  <rect x="265" y="70" width="190" height="6" rx="3" fill="#eb6834"/>
+  <rect x="265" y="70" width="190" height="6" rx="3" fill="#43799b"/>
   <text class="t" x="360" y="108" text-anchor="middle">FHIR Data Pipes</text>
   <text class="s" x="360" y="130" text-anchor="middle">reads every resource</text>
   <text class="s" x="360" y="152" text-anchor="middle">applies the</text>
   <text class="s" x="360" y="170" text-anchor="middle">ViewDefinitions</text>
 
   <rect class="box" x="510" y="70" width="190" height="130" rx="12"/>
-  <rect x="510" y="70" width="190" height="6" rx="3" fill="#1baf7a"/>
+  <rect x="510" y="70" width="190" height="6" rx="3" fill="#413b75"/>
   <text class="t" x="605" y="108" text-anchor="middle">Flat tables</text>
   <text class="s" x="605" y="130" text-anchor="middle">Postgres, analytics DB</text>
   <text class="s" x="605" y="152" text-anchor="middle">patient_flat,</text>
   <text class="s" x="605" y="170" text-anchor="middle">encounter_flat ...</text>
 
   <rect class="box" x="755" y="70" width="145" height="130" rx="12"/>
-  <rect x="755" y="70" width="145" height="6" rx="3" fill="#eda100"/>
+  <rect x="755" y="70" width="145" height="6" rx="3" fill="#888d8d"/>
   <text class="t" x="827" y="108" text-anchor="middle">Dashboard</text>
   <text class="s" x="827" y="130" text-anchor="middle">Observable</text>
   <text class="s" x="827" y="152" text-anchor="middle">Framework runs</text>
@@ -42,11 +42,11 @@
   <path class="arrow" d="M457 135H507"/>
   <path class="arrow" d="M702 135H752"/>
 
-  <rect x="20" y="222" width="190" height="26" rx="13" fill="#2a78d6"/>
+  <rect x="20" y="222" width="190" height="26" rx="13" fill="#625cab"/>
   <text class="tab" x="115" y="239" text-anchor="middle">Tab 2: FHIR server</text>
-  <rect x="265" y="222" width="190" height="26" rx="13" fill="#eb6834"/>
+  <rect x="265" y="222" width="190" height="26" rx="13" fill="#43799b"/>
   <text class="tab" x="360" y="239" text-anchor="middle">Tab 3: Pipelines</text>
-  <rect x="755" y="222" width="145" height="26" rx="13" fill="#b07a00"/>
+  <rect x="755" y="222" width="145" height="26" rx="13" fill="#6f7779"/>
   <text class="tab" x="827" y="239" text-anchor="middle">Tab 4: Dashboard</text>
 
   <rect x="265" y="14" width="435" height="34" rx="17" fill="#f1f0ec" stroke="#cfcfca"/>

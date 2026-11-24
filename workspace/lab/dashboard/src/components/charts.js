@@ -5,9 +5,8 @@
 // legend, bars carry hover tips, and the data is also shown as a table.
 import * as Plot from "npm:@observablehq/plot";
 
-export const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"];
-const INK = "#52514e";
-const GRID = "#e7e6e2";
+export const PALETTE = ["#625cab", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"];
+const INK = "#4c5456";
 
 const base = {
   style: {fontFamily: "inherit", fontSize: "12px", color: INK, background: "transparent"},

@@ -10,7 +10,7 @@ export default {
   ],
   style: "style.css",
   theme: "air",
-  footer: "Built from the analytics database that FHIR Data Pipes fills.",
+  footer: "Open Health Stack Software Foundation. Built from the analytics database that FHIR Data Pipes fills.",
   sidebar: false,
   toc: false,
   pager: false,

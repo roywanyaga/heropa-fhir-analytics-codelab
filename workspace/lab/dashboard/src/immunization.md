@@ -12,6 +12,8 @@ const totals = d3.rollups(vaccines, (v) => d3.sum(v, (d) => d.doses), (d) => d.v
   .sort((a, b) => b.doses - a.doses);
 ```
 
+<img class="logo" src="./assets/ohs-logo.png" alt="Open Health Stack Software Foundation">
+
 <div class="top">
   <div>
     <h1>Immunization</h1>
