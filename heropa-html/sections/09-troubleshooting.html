@@ -8,8 +8,16 @@
 </thead>
 <tbody>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">The Dashboard tab shows sample data</td>
-<td style="border: 1px solid #333; padding: 8px;">The pipeline has not filled the tables yet. Run <code>run-pipeline</code>, then <code>refresh</code>. The Pipeline log says which data the last build used.</td>
+<td style="border: 1px solid #333; padding: 8px;">The Dashboard says there is no data yet</td>
+<td style="border: 1px solid #333; padding: 8px;">The pipeline has not run. Click <strong>Run Full</strong> in the Pipelines tab, or type <code>run-pipeline</code>.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">The FHIR server tab shows a count of 0</td>
+<td style="border: 1px solid #333; padding: 8px;">The data is still loading. Wait a minute and watch the Pipeline log.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">The Dashboard did not change after the pipeline finished</td>
+<td style="border: 1px solid #333; padding: 8px;">Wait 30 seconds, or click <strong>Refresh dashboard</strong>. The Pipeline log says which data the last build used.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>refresh</code> says the build failed</td>
@@ -17,7 +25,7 @@
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;">The pipeline run stays on running</td>
-<td style="border: 1px solid #333; padding: 8px;">A full run on this lab takes a few minutes. Follow it in the Pipelines tab.</td>
+<td style="border: 1px solid #333; padding: 8px;">A full run takes a few minutes. Follow it in the Pipelines tab.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>pipeline-status</code> shows <code>none</code> in the flat table column</td>

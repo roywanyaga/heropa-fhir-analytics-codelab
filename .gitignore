@@ -8,3 +8,4 @@ workspace/lab/dashboard/dist/
 workspace/lab/dashboard/src/.observablehq/
 __pycache__/
 _import.tar.gz
+.DS_Store

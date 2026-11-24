@@ -109,6 +109,7 @@ services:
       - ./pipeline/config:/home/learner/lab/pipeline/config
       - ./pipeline/views-extra:/home/learner/lab/pipeline/views-extra
       - ./course-manual.md:/opt/codelab/guide/course-manual.md:ro
+      - ./guide-images:/opt/codelab/guide/images:ro
     depends_on:
       postgres:
         condition: service_healthy

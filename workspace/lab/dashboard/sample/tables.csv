@@ -1,0 +1,7 @@
+resource,rows
+Patient,312
+Group,74
+Encounter,1164
+Condition,420
+Observation,1730
+Immunization,244

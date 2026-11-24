@@ -1,0 +1,46 @@
+<h2>3. Look at the data on the FHIR server</h2>
+<p>A FHIR server stores each record as a resource: a nested JSON document with a type, such as Patient or Encounter. Applications read it with the FHIR search API, which is just web addresses. The lab opens the server to reading from your browser. Everything here is read only.</p>
+<p>The addresses below all start with the address of your lab. The quickest way to use them is to click <strong>FHIR server</strong> at the bottom of the Editor, and then change the end of the address in the browser bar.</p>
+<ol>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Count the patients.</strong> The first tab you opened already shows it. The <code>total</code> is the number of Patient resources.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?_summary=count
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>See the first three patients.</strong> <code>_count</code> sets how many resources come back.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?_count=3
+</code></pre>
+<p>Each entry is one Patient. Find <code>gender</code>, <code>birthDate</code> and <code>name</code>. Note the <code>id</code> of the first one.</p>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Open one patient.</strong> Put the id you noted at the end.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient/&lt;the id&gt;
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Search.</strong> Everything after the question mark is a search parameter. Try these.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?gender=female&amp;_summary=count
+/fhir/Patient?birthdate=ge2022-01-01&amp;_count=5
+/fhir/Encounter?_count=2
+/fhir/Immunization?_summary=count
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Find the Sengmany family.</strong> Somsak is a newborn in the SMART Trust demonstrator. This search returns him together with the vaccine doses that point at him.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?name=Somsak&amp;_revinclude=Immunization:patient
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Count from the terminal.</strong> Switch to the Editor and open the Terminal. The lab sets <code>FHIR_URL</code> for you.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">curl -s &quot;$FHIR_URL/Patient?_summary=count&quot; | jq .total
+curl -s &quot;$FHIR_URL/Encounter?_summary=count&quot; | jq .total
+</code></pre>
+</li>
+</ol>
+<p>This is the shape of data a FHIR server holds: deeply nested, one resource at a time. It is good for an app that shows one patient. It is hard to count with. That is what the next step is for.</p>
+<h3>The dashboard is empty so far</h3>
+<p>Click <strong>Dashboard</strong> at the bottom of the Editor. The page says there is no data in the analytics database yet. The data is on the FHIR server, but nothing has moved it into the flat tables the dashboard reads. In the Terminal, compare the two.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
+</code></pre>
+<p>The FHIR server column has numbers and the flat table column says <code>none</code>. Keep the Dashboard tab open. You will watch it fill.</p>

@@ -17,13 +17,14 @@ status building
 cd "$CODELAB_DIR/dashboard"
 bash scripts/clear_data_cache.sh
 
-# Use the database when the pipeline has filled it, and the sample data until then.
-if psql -X -q -w -t -A -c "SELECT 1 FROM patient_flat LIMIT 1" 2>/dev/null | grep -q 1; then
+# Use the database once the pipeline has filled it. Before that, build the
+# empty state, which tells the learner to run the pipeline.
+if [[ "$(psql -X -q -w -t -A -c "SELECT count(*) FROM patient_flat" 2>/dev/null || echo 0)" -gt 0 ]]; then
   export LAB_SAMPLE=0
   echo "[$(date +%T)] Building the dashboard from the analytics database" >> "$LOG"
 else
-  export LAB_SAMPLE=1
-  echo "[$(date +%T)] The pipeline has not filled the tables yet, so the dashboard shows sample data" >> "$LOG"
+  export LAB_SAMPLE=empty
+  echo "[$(date +%T)] The pipeline has not filled the tables yet, so the dashboard shows an empty state" >> "$LOG"
 fi
 
 if npx observable build >> "$LOG" 2>&1; then

@@ -1,0 +1,23 @@
+<h2>5. Watch the dashboard fill</h2>
+<p>Switch to the Dashboard tab. You do not have to do anything. About 30 seconds after the flat tables change, the lab rebuilds the dashboard, and the tab reloads by itself. The page now shows patients, households, visits and vaccine doses, three charts, and a bar chart of the rows in each flat table. The Immunization page shows the vaccine doses.</p>
+<p>If you do not want to wait, click <strong>Refresh dashboard</strong> at the bottom of the Editor, or type <code>refresh</code> in the Terminal.</p>
+<h3>How the dashboard reads the tables</h3>
+<p>Observable Framework builds a static site. Each file in <code>dashboard/src/data</code> that ends in <code>.csv.sh</code> is a data loader. When the site is built, the loader runs a SQL query and prints a CSV, and the page reads it with <code>FileAttachment</code>.</p>
+<ol>
+<li>Open <code>dashboard/src/data/gender_age.csv.sh</code>. It is a SQL query over <code>patient_flat</code> that groups patients by gender and age group.</li>
+<li>Open <code>dashboard/src/index.md</code>. The first block loads each CSV. The lines below it draw them with the helpers in <code>components/charts.js</code>.</li>
+</ol>
+<h3>Change a query</h3>
+<ol>
+<li>In <code>gender_age.csv.sh</code>, make three small changes so that the second group becomes ages 5 to 17 and the third starts at 18.
+<ul>
+<li><code>&lt; 15</code> becomes <code>&lt; 18</code></li>
+<li><code>'5-14'</code> becomes <code>'5-17'</code></li>
+<li><code>'15-24'</code> becomes <code>'18-24'</code></li>
+</ul>
+</li>
+<li>Open <code>dashboard/src/index.md</code> and change <code>&quot;5-14&quot;, &quot;15-24&quot;</code> in the <code>order</code> list to <code>&quot;5-17&quot;, &quot;18-24&quot;</code>.</li>
+<li>Save both files. The Pipeline log shows the build and then <code>BUILD OK</code>.</li>
+<li>Switch to the Dashboard tab. It reloads, and the chart uses the new groups.</li>
+</ol>
+<p>Saving a file in <code>dashboard/src</code> rebuilds the dashboard at once. A change in the database does not, because the dashboard only reads the tables when it is built. The lab watches the tables for you and rebuilds when they change.</p>

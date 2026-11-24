@@ -86,6 +86,25 @@ preflight() {
     [ "$mem_gb" -ge 7 ] \
         || warn "this VM has about ${mem_gb} GB of memory. Untested. HAPI, the pipeline and Postgres need about 6 GB together."
 
+    local disk_gb
+    disk_gb=$(( $(df --output=size -B1G / | tail -1 | tr -dc 0-9) ))
+    [ "$disk_gb" -ge 30 ] \
+        || warn "the disk is ${disk_gb} GB. The images and the lab data need about 12 GB, and the build needs the same again while it runs. Use 40 GB."
+
+    # A 2 GB swap file, kept across reboots. The lab sits near 4 GB of memory
+    # when idle and peaks while the pipeline runs. 2 GB is enough of a cushion
+    # without using the disk. An 8 GB file filled the 19 GB disk of the first test VM.
+    if [ -z "$(swapon --show --noheadings)" ]; then
+        log "adding a 2 GB swap file"
+        fallocate -l 2G /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile >/dev/null
+        swapon /swapfile
+        grep -q '^/swapfile ' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+    else
+        log "swap is already on"
+    fi
+
     log "updating the package index"
     "${APT[@]}" update
 

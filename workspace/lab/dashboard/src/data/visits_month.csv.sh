@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Visits (Encounters) per month.
-source "$(dirname "$0")/../../scripts/lib.sh"
+. "$(dirname "$0")/../../scripts/lib.sh"
 query_or_sample visits_month.csv <<'SQL'
 SELECT to_char(date_trunc('month', period_start::timestamp), 'YYYY-MM') AS month,
        count(DISTINCT id) AS visits

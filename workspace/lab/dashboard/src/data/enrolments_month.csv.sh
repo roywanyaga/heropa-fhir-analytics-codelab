@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # New programme enrolments per month. A Condition is the enrolment record.
-source "$(dirname "$0")/../../scripts/lib.sh"
+. "$(dirname "$0")/../../scripts/lib.sh"
 query_or_sample enrolments_month.csv <<'SQL'
 SELECT to_char(date_trunc('month', coalesce(onset_datetime, recorded_date)::timestamp), 'YYYY-MM') AS month,
        coalesce(code_text, 'Other') AS programme,

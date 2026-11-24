@@ -2,3 +2,6 @@
 cd "$CODELAB_DIR" 2>/dev/null || true
 PS1='\[\e[1;32m\]codelab\[\e[0m\] \[\e[1;34m\]\W\[\e[0m\] \$ '
 alias ll='ls -la'
+# The editor passes the browser's locale to the terminal, which the image does
+# not have, and psql then prints perl warnings.
+export LANG=C.UTF-8 LC_ALL=C.UTF-8

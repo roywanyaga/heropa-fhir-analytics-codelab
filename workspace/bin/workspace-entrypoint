@@ -18,6 +18,7 @@ mkdir -p "$HOME/.codelab"
 
 ( while true; do codelab-watch >> "$HOME/build.log" 2>&1 || true
     echo "The build watcher stopped and is starting again." >> "$HOME/build.log"; sleep 2; done ) &
+( while true; do data-watch >> "$HOME/build.log" 2>&1 || true; sleep 5; done ) &
 ( [[ -f "$HOME/.codelab/seeded" ]] || lab-seed ) &
 
 exec code-server \

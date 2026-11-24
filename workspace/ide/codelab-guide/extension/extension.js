@@ -207,6 +207,16 @@ function openPipelines() {
   vscode.env.openExternal(vscode.Uri.parse(url));
 }
 
+// The FHIR server is read only from the browser, so a learner can look at the
+// data with a plain address.
+function openFhir() {
+  if (LAB_URL === '') {
+    vscode.window.showWarningMessage('The lab address is not known. Start the lab with lab-init.sh.');
+    return;
+  }
+  vscode.env.openExternal(vscode.Uri.parse(LAB_URL + '/fhir/Patient?_summary=count'));
+}
+
 function statusButton(context, text, tooltip, command, priority) {
   const button = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, priority);
   button.text = text;
@@ -224,6 +234,7 @@ function activate(context) {
     vscode.commands.registerCommand('codelab.openApp', openApp),
     vscode.commands.registerCommand('codelab.runPipeline', runPipeline),
     vscode.commands.registerCommand('codelab.openPipelines', openPipelines),
+    vscode.commands.registerCommand('codelab.openFhir', openFhir),
     vscode.commands.registerCommand('codelab.buildNow', buildNow),
     // Without these the editor would bring the two tabs back empty after a
     // reload.
@@ -242,8 +253,9 @@ function activate(context) {
       },
     }),
   );
-  statusButton(context, '$(link-external) Open dashboard', 'Open the dashboard in a new browser tab', 'codelab.openApp', 104);
-  statusButton(context, '$(server-process) Open pipelines', 'Open the FHIR Data Pipes controller in a new browser tab', 'codelab.openPipelines', 103);
+  statusButton(context, '$(database) FHIR server', 'Open the FHIR server in a new browser tab', 'codelab.openFhir', 105);
+  statusButton(context, '$(server-process) Pipelines', 'Open the FHIR Data Pipes controller in a new browser tab', 'codelab.openPipelines', 104);
+  statusButton(context, '$(graph) Dashboard', 'Open the dashboard in a new browser tab', 'codelab.openApp', 103);
   statusButton(context, '$(play) Run pipeline', 'Start a full pipeline run', 'codelab.runPipeline', 102.5);
   statusButton(context, '$(refresh) Refresh dashboard', 'Rebuild the dashboard from the analytics database', 'codelab.buildNow', 102.2);
   statusButton(context, '$(book) Guide', 'Show the codelab guide', 'codelab.showGuide', 102);

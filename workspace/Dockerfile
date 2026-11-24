@@ -4,7 +4,7 @@
 # project, the lab commands, a Postgres client, Python for the data generator,
 # and code-server, which is VS Code served to a browser.
 
-FROM node:20-bookworm
+FROM node:20-bookworm-slim
 
 ARG CODE_SERVER_VERSION=4.145.2
 
@@ -30,13 +30,15 @@ COPY --chown=learner:learner pristine /opt/codelab/pristine
 
 USER learner
 WORKDIR /home/learner/lab/dashboard
-ENV CODELAB_DIR=/home/learner/lab
+ENV CODELAB_DIR=/home/learner/lab \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 # Install the dashboard's packages now, so a learner never waits for npm, then
 # build the site once from the sample data, so the Dashboard tab shows
 # something before the first pipeline run.
 RUN npm install --no-audit --no-fund \
- && LAB_SAMPLE=1 npx observable build
+ && LAB_SAMPLE=empty npx observable build
 
 
 COPY --chown=learner:learner ide/settings.json /home/learner/.local/share/code-server/User/settings.json

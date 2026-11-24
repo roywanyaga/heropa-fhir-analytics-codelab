@@ -11,38 +11,51 @@
 </code></pre>
 </li>
 <li>
-<p>Wait about a minute. The command ends with a summary like the one below. The addresses and the password in the example are placeholders and do not work. Use the ones your own terminal prints.</p>
+<p>Wait about two minutes. The command ends with a summary like the one below. <strong>The addresses and the password in this example are placeholders and do not work.</strong> Use the ones your own terminal prints.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">The lab is ready. Open these in the browser on your own computer.
 
   Editor            https://203-0-113-10.sslip.io/ide/
   Editor password   4827
-  Dashboard         https://203-0-113-10.sslip.io/dashboard/
+  FHIR server       https://203-0-113-10.sslip.io/fhir/Patient?_summary=count
   Pipelines         https://203-0-113-10.sslip.io:8443/
-  FHIR server       https://203-0-113-10.sslip.io/fhir/metadata
+  Dashboard         https://203-0-113-10.sslip.io/dashboard/
 </code></pre>
+<p>The numbers in the middle of each address, here <code>203-0-113-10</code>, are the public address of your own lab. Yours is different.</p>
+</li>
+<li>
+<p>The lab loads its synthetic data into the FHIR server in the background while the Editor starts. It takes about a minute. The Pipeline log in the Editor says when it is done.</p>
 </li>
 </ol>
-<h3>Open the three tabs</h3>
-<p>You work in three browser tabs. Put them side by side if you have room.</p>
+<h3>Open the four tabs</h3>
+<p>Open the Editor first, enter the password, and keep it open. The buttons at the bottom of the Editor open the other three in new browser tabs, so you never have to type an address.</p>
 <table style="border-collapse: collapse; width: 100%; margin-bottom: 16px;">
 <thead>
 <tr>
 <th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">Tab</th>
 <th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">What it is for</th>
+<th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">How to open it</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Editor</td>
-<td style="border: 1px solid #333; padding: 8px;">The ViewDefinitions, the dashboard code, a terminal and this guide. Enter the editor password when it asks.</td>
+<td style="border: 1px solid #333; padding: 8px;">1. Editor</td>
+<td style="border: 1px solid #333; padding: 8px;">The ViewDefinitions, the dashboard code, a terminal and this guide</td>
+<td style="border: 1px solid #333; padding: 8px;">The Editor address from the summary</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Dashboard</td>
-<td style="border: 1px solid #333; padding: 8px;">The dashboard. Click <strong>Open dashboard</strong> at the bottom of the Editor to open it. It reloads after each build.</td>
+<td style="border: 1px solid #333; padding: 8px;">2. FHIR server</td>
+<td style="border: 1px solid #333; padding: 8px;">The data as FHIR resources</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>FHIR server</strong> at the bottom of the Editor</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Pipelines</td>
-<td style="border: 1px solid #333; padding: 8px;">The FHIR Data Pipes Controller. Click <strong>Open pipelines</strong> at the bottom of the Editor.</td>
+<td style="border: 1px solid #333; padding: 8px;">3. Pipelines</td>
+<td style="border: 1px solid #333; padding: 8px;">The FHIR Data Pipes controller, where you run the pipeline</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>Pipelines</strong> at the bottom of the Editor</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">4. Dashboard</td>
+<td style="border: 1px solid #333; padding: 8px;">The Observable Framework dashboard</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>Dashboard</strong> at the bottom of the Editor</td>
 </tr>
 </tbody>
 </table>
@@ -67,14 +80,14 @@
 <td style="border: 1px solid #333; padding: 8px;">The file you are changing</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Pipeline log</td>
+<td style="border: 1px solid #333; padding: 8px;">Terminal</td>
 <td style="border: 1px solid #333; padding: 8px;">Bottom centre</td>
-<td style="border: 1px solid #333; padding: 8px;">What the pipeline and the dashboard build report</td>
+<td style="border: 1px solid #333; padding: 8px;">For typing commands. Open another with Ctrl and the backtick key.</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Terminal</td>
-<td style="border: 1px solid #333; padding: 8px;">Bottom centre, next to the Pipeline log</td>
-<td style="border: 1px solid #333; padding: 8px;">For typing commands</td>
+<td style="border: 1px solid #333; padding: 8px;">Pipeline log</td>
+<td style="border: 1px solid #333; padding: 8px;">Bottom centre, next to the Terminal</td>
+<td style="border: 1px solid #333; padding: 8px;">What the data load, the pipeline and the dashboard build report</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;">Guide</td>
@@ -83,7 +96,6 @@
 </tr>
 </tbody>
 </table>
-<p>The bar at the bottom has buttons for <strong>Open dashboard</strong>, <strong>Open pipelines</strong>, <strong>Run pipeline</strong>, <strong>Refresh dashboard</strong>, <strong>Guide</strong> and <strong>Pipeline log</strong>.</p>
 <h3>Find your addresses again</h3>
 <p>Come back here after a break, or when a tab stops loading. Start the VM in Heropa if it is stopped, reload the tabs, and if they do not load run <code>./lab-init.sh</code> again in <code>~/analytics-codelab</code>. It is safe at any time and your changes are kept. <code>./lab-init.sh --info</code> prints the addresses and the password without changing anything.</p>
 <h3>The files</h3>
@@ -114,10 +126,6 @@
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>dashboard/src/components/charts.js</code></td>
 <td style="border: 1px solid #333; padding: 8px;">Chart helpers shared by the pages</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>dashboard/sample/</code></td>
-<td style="border: 1px solid #333; padding: 8px;">Sample data the dashboard uses until the pipeline has filled the tables</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>data/generate.py</code></td>

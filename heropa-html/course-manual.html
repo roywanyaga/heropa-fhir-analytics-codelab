@@ -1,19 +1,18 @@
 <h1>Analytics on FHIR with FHIR Data Pipes and Observable Framework</h1>
-<p>This guide takes you through the analytics codelab on the Heropa lab. You change FHIR data and ViewDefinitions in an editor in your browser, run the FHIR Data Pipes pipeline, and watch a dashboard built with Observable Framework change. You install nothing.</p>
+<p>This guide takes you through the analytics codelab on the Heropa lab. You look at FHIR data on a FHIR server, run the FHIR Data Pipes pipeline, and watch a dashboard built with Observable Framework fill with numbers. Then you change a ViewDefinition and add more data, and watch the dashboard follow. You install nothing.</p>
 <p>It follows the same path as the published <a href="https://ohs-foundation.github.io/ohs-docs/tutorials-and-codelabs/sql-on-fhir-analytics/">SQL on FHIR analytics tutorial</a>, with the dashboard written in Observable Framework in place of Superset. This guide covers the lab only.</p>
 <p>The synthetic data is made by a generator taken from the OHS Player analytics repository. It also contains the Sengmany family from the <a href="https://github.com/litlfred/smart-trust-demo">SMART Trust demonstrator</a>, a fictional family whose child has vaccine doses recorded in two countries.</p>
 <h2>1. Before you begin</h2>
 <h3>What you'll build</h3>
-<p>You will follow FHIR data from a FHIR server, through a pipeline, into flat database tables, and onto a dashboard. Along the way you change a ViewDefinition and a data query, add more data, and see each change reach the dashboard.</p>
-<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">FHIR server (HAPI) --&gt; FHIR Data Pipes --&gt; flat tables (Postgres) --&gt; dashboard (Observable Framework)
-                        ViewDefinitions                              SQL data loaders
-</code></pre>
+<p>You will follow FHIR data from a FHIR server, through a pipeline, into flat database tables, and onto a dashboard. You work in four browser tabs, and they are used in this order: the Editor, the FHIR server, the Pipelines tab and the Dashboard.</p>
+<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MjAgMzAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkRhdGEgZmxvd3MgZnJvbSB0aGUgRkhJUiBzZXJ2ZXIgdGhyb3VnaCBGSElSIERhdGEgUGlwZXMgaW50byBQb3N0Z3JlcyB0YWJsZXMgYW5kIHRoZW4gdG8gdGhlIGRhc2hib2FyZCI+CiAgPHN0eWxlPgogICAgdGV4dCB7IGZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmaWxsOiAjMWIxYjFiOyB9CiAgICAudCB7IGZvbnQtc2l6ZTogMTdweDsgZm9udC13ZWlnaHQ6IDcwMDsgfQogICAgLnMgeyBmb250LXNpemU6IDEzcHg7IGZpbGw6ICM1NTU7IH0KICAgIC50YWIgeyBmb250LXNpemU6IDEycHg7IGZvbnQtd2VpZ2h0OiA3MDA7IGZpbGw6ICNmZmY7IH0KICAgIC5ib3ggeyBmaWxsOiAjZmZmOyBzdHJva2U6ICNjZmNmY2E7IHN0cm9rZS13aWR0aDogMS41OyB9CiAgICAuYXJyb3cgeyBzdHJva2U6ICM3Nzc7IHN0cm9rZS13aWR0aDogMjsgZmlsbDogbm9uZTsgbWFya2VyLWVuZDogdXJsKCNhaCk7IH0KICA8L3N0eWxlPgogIDxkZWZzPjxtYXJrZXIgaWQ9ImFoIiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjkiIHJlZlk9IjUiIG1hcmtlcldpZHRoPSI4IiBtYXJrZXJIZWlnaHQ9IjgiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTTAgMEwxMCA1TDAgMTB6IiBmaWxsPSIjNzc3Ii8+PC9tYXJrZXI+PC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5MjAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZmNmY2ZiIi8+CgogIDxyZWN0IGNsYXNzPSJib3giIHg9IjIwIiB5PSI3MCIgd2lkdGg9IjE5MCIgaGVpZ2h0PSIxMzAiIHJ4PSIxMiIvPgogIDxyZWN0IHg9IjIwIiB5PSI3MCIgd2lkdGg9IjE5MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzJhNzhkNiIvPgogIDx0ZXh0IGNsYXNzPSJ0IiB4PSIxMTUiIHk9IjEwOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RkhJUiBzZXJ2ZXI8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjExNSIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IQVBJIEZISVI8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjExNSIgeT0iMTUyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QYXRpZW50LCBFbmNvdW50ZXIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIxMTUiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1tdW5pemF0aW9uIC4uLiBhcyBKU09OPC90ZXh0PgoKICA8cmVjdCBjbGFzcz0iYm94IiB4PSIyNjUiIHk9IjcwIiB3aWR0aD0iMTkwIiBoZWlnaHQ9IjEzMCIgcng9IjEyIi8+CiAgPHJlY3QgeD0iMjY1IiB5PSI3MCIgd2lkdGg9IjE5MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2ViNjgzNCIvPgogIDx0ZXh0IGNsYXNzPSJ0IiB4PSIzNjAiIHk9IjEwOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RkhJUiBEYXRhIFBpcGVzPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNjAiIHk9IjEzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+cmVhZHMgZXZlcnkgcmVzb3VyY2U8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjM2MCIgeT0iMTUyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5hcHBsaWVzIHRoZTwvdGV4dD4KICA8dGV4dCBjbGFzcz0icyIgeD0iMzYwIiB5PSIxNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlZpZXdEZWZpbml0aW9uczwvdGV4dD4KCiAgPHJlY3QgY2xhc3M9ImJveCIgeD0iNTEwIiB5PSI3MCIgd2lkdGg9IjE5MCIgaGVpZ2h0PSIxMzAiIHJ4PSIxMiIvPgogIDxyZWN0IHg9IjUxMCIgeT0iNzAiIHdpZHRoPSIxOTAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiMxYmFmN2EiLz4KICA8dGV4dCBjbGFzcz0idCIgeD0iNjA1IiB5PSIxMDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZsYXQgdGFibGVzPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI2MDUiIHk9IjEzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UG9zdGdyZXMsIGFuYWx5dGljcyBEQjwvdGV4dD4KICA8dGV4dCBjbGFzcz0icyIgeD0iNjA1IiB5PSIxNTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPnBhdGllbnRfZmxhdCw8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjYwNSIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5lbmNvdW50ZXJfZmxhdCAuLi48L3RleHQ+CgogIDxyZWN0IGNsYXNzPSJib3giIHg9Ijc1NSIgeT0iNzAiIHdpZHRoPSIxNDUiIGhlaWdodD0iMTMwIiByeD0iMTIiLz4KICA8cmVjdCB4PSI3NTUiIHk9IjcwIiB3aWR0aD0iMTQ1IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZWRhMTAwIi8+CiAgPHRleHQgY2xhc3M9InQiIHg9IjgyNyIgeT0iMTA4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5EYXNoYm9hcmQ8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjgyNyIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PYnNlcnZhYmxlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI4MjciIHk9IjE1MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RnJhbWV3b3JrIHJ1bnM8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjgyNyIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TUUwsIGRyYXdzIGNoYXJ0czwvdGV4dD4KCiAgPHBhdGggY2xhc3M9ImFycm93IiBkPSJNMjEyIDEzNUgyNjIiLz4KICA8cGF0aCBjbGFzcz0iYXJyb3ciIGQ9Ik00NTcgMTM1SDUwNyIvPgogIDxwYXRoIGNsYXNzPSJhcnJvdyIgZD0iTTcwMiAxMzVINzUyIi8+CgogIDxyZWN0IHg9IjIwIiB5PSIyMjIiIHdpZHRoPSIxOTAiIGhlaWdodD0iMjYiIHJ4PSIxMyIgZmlsbD0iIzJhNzhkNiIvPgogIDx0ZXh0IGNsYXNzPSJ0YWIiIHg9IjExNSIgeT0iMjM5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UYWIgMjogRkhJUiBzZXJ2ZXI8L3RleHQ+CiAgPHJlY3QgeD0iMjY1IiB5PSIyMjIiIHdpZHRoPSIxOTAiIGhlaWdodD0iMjYiIHJ4PSIxMyIgZmlsbD0iI2ViNjgzNCIvPgogIDx0ZXh0IGNsYXNzPSJ0YWIiIHg9IjM2MCIgeT0iMjM5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UYWIgMzogUGlwZWxpbmVzPC90ZXh0PgogIDxyZWN0IHg9Ijc1NSIgeT0iMjIyIiB3aWR0aD0iMTQ1IiBoZWlnaHQ9IjI2IiByeD0iMTMiIGZpbGw9IiNiMDdhMDAiLz4KICA8dGV4dCBjbGFzcz0idGFiIiB4PSI4MjciIHk9IjIzOSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGFiIDQ6IERhc2hib2FyZDwvdGV4dD4KCiAgPHJlY3QgeD0iMjY1IiB5PSIxNCIgd2lkdGg9IjQzNSIgaGVpZ2h0PSIzNCIgcng9IjE3IiBmaWxsPSIjZjFmMGVjIiBzdHJva2U9IiNjZmNmY2EiLz4KICA8dGV4dCBjbGFzcz0icyIgeD0iNDgyIiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGFiIDE6IHRoZSBFZGl0b3IgaG9sZHMgdGhlIFZpZXdEZWZpbml0aW9ucyBhbmQgdGhlIGRhc2hib2FyZCBjb2RlPC90ZXh0PgogIDxwYXRoIGQ9Ik0zNjAgNDhWNjgiIHN0cm9rZT0iI2NmY2ZjYSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTYwNSA0OFY2OCIgc3Ryb2tlPSIjY2ZjZmNhIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCBjbGFzcz0icyIgeD0iNDYwIiB5PSIyNzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPllvdSBjaGFuZ2UgdGhlIFZpZXdEZWZpbml0aW9ucyBhbmQgdGhlIGRhc2hib2FyZCBxdWVyaWVzLiBUaGUgZGF0YSBtb3ZlcyBmcm9tIGxlZnQgdG8gcmlnaHQuPC90ZXh0Pgo8L3N2Zz4K" alt="The data flows from the FHIR server through FHIR Data Pipes into flat tables and on to the dashboard" style="max-width: 100%; height: auto; border: 1px solid #ddd;" /></p>
 <h3>What you'll learn</h3>
 <ul>
-<li>What a ViewDefinition is and how it turns a FHIR resource into a table</li>
+<li>How to read data from a FHIR server with plain addresses and the FHIR search API</li>
+<li>What FHIR Data Pipes does, and what a ViewDefinition is</li>
 <li>How to run the pipeline from the Controller UI and from the terminal</li>
-<li>How an Observable Framework dashboard reads those tables with data loaders</li>
-<li>How to change a ViewDefinition and see the effect on the dashboard</li>
+<li>How an Observable Framework dashboard reads the flat tables with data loaders</li>
+<li>How to change a ViewDefinition and a query and see the dashboard change</li>
 <li>How to add data to the FHIR server and bring it through the pipeline</li>
 </ul>
 <h3>What you'll need</h3>
@@ -31,38 +30,51 @@
 </code></pre>
 </li>
 <li>
-<p>Wait about a minute. The command ends with a summary like the one below. The addresses and the password in the example are placeholders and do not work. Use the ones your own terminal prints.</p>
+<p>Wait about two minutes. The command ends with a summary like the one below. <strong>The addresses and the password in this example are placeholders and do not work.</strong> Use the ones your own terminal prints.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">The lab is ready. Open these in the browser on your own computer.
 
   Editor            https://203-0-113-10.sslip.io/ide/
   Editor password   4827
-  Dashboard         https://203-0-113-10.sslip.io/dashboard/
+  FHIR server       https://203-0-113-10.sslip.io/fhir/Patient?_summary=count
   Pipelines         https://203-0-113-10.sslip.io:8443/
-  FHIR server       https://203-0-113-10.sslip.io/fhir/metadata
+  Dashboard         https://203-0-113-10.sslip.io/dashboard/
 </code></pre>
+<p>The numbers in the middle of each address, here <code>203-0-113-10</code>, are the public address of your own lab. Yours is different.</p>
+</li>
+<li>
+<p>The lab loads its synthetic data into the FHIR server in the background while the Editor starts. It takes about a minute. The Pipeline log in the Editor says when it is done.</p>
 </li>
 </ol>
-<h3>Open the three tabs</h3>
-<p>You work in three browser tabs. Put them side by side if you have room.</p>
+<h3>Open the four tabs</h3>
+<p>Open the Editor first, enter the password, and keep it open. The buttons at the bottom of the Editor open the other three in new browser tabs, so you never have to type an address.</p>
 <table style="border-collapse: collapse; width: 100%; margin-bottom: 16px;">
 <thead>
 <tr>
 <th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">Tab</th>
 <th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">What it is for</th>
+<th style="border: 1px solid #333; padding: 8px; text-align: left; background: #f5f5f5;">How to open it</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Editor</td>
-<td style="border: 1px solid #333; padding: 8px;">The ViewDefinitions, the dashboard code, a terminal and this guide. Enter the editor password when it asks.</td>
+<td style="border: 1px solid #333; padding: 8px;">1. Editor</td>
+<td style="border: 1px solid #333; padding: 8px;">The ViewDefinitions, the dashboard code, a terminal and this guide</td>
+<td style="border: 1px solid #333; padding: 8px;">The Editor address from the summary</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Dashboard</td>
-<td style="border: 1px solid #333; padding: 8px;">The dashboard. Click <strong>Open dashboard</strong> at the bottom of the Editor to open it. It reloads after each build.</td>
+<td style="border: 1px solid #333; padding: 8px;">2. FHIR server</td>
+<td style="border: 1px solid #333; padding: 8px;">The data as FHIR resources</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>FHIR server</strong> at the bottom of the Editor</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Pipelines</td>
-<td style="border: 1px solid #333; padding: 8px;">The FHIR Data Pipes Controller. Click <strong>Open pipelines</strong> at the bottom of the Editor.</td>
+<td style="border: 1px solid #333; padding: 8px;">3. Pipelines</td>
+<td style="border: 1px solid #333; padding: 8px;">The FHIR Data Pipes controller, where you run the pipeline</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>Pipelines</strong> at the bottom of the Editor</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">4. Dashboard</td>
+<td style="border: 1px solid #333; padding: 8px;">The Observable Framework dashboard</td>
+<td style="border: 1px solid #333; padding: 8px;"><strong>Dashboard</strong> at the bottom of the Editor</td>
 </tr>
 </tbody>
 </table>
@@ -87,14 +99,14 @@
 <td style="border: 1px solid #333; padding: 8px;">The file you are changing</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Pipeline log</td>
+<td style="border: 1px solid #333; padding: 8px;">Terminal</td>
 <td style="border: 1px solid #333; padding: 8px;">Bottom centre</td>
-<td style="border: 1px solid #333; padding: 8px;">What the pipeline and the dashboard build report</td>
+<td style="border: 1px solid #333; padding: 8px;">For typing commands. Open another with Ctrl and the backtick key.</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">Terminal</td>
-<td style="border: 1px solid #333; padding: 8px;">Bottom centre, next to the Pipeline log</td>
-<td style="border: 1px solid #333; padding: 8px;">For typing commands</td>
+<td style="border: 1px solid #333; padding: 8px;">Pipeline log</td>
+<td style="border: 1px solid #333; padding: 8px;">Bottom centre, next to the Terminal</td>
+<td style="border: 1px solid #333; padding: 8px;">What the data load, the pipeline and the dashboard build report</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;">Guide</td>
@@ -103,7 +115,6 @@
 </tr>
 </tbody>
 </table>
-<p>The bar at the bottom has buttons for <strong>Open dashboard</strong>, <strong>Open pipelines</strong>, <strong>Run pipeline</strong>, <strong>Refresh dashboard</strong>, <strong>Guide</strong> and <strong>Pipeline log</strong>.</p>
 <h3>Find your addresses again</h3>
 <p>Come back here after a break, or when a tab stops loading. Start the VM in Heropa if it is stopped, reload the tabs, and if they do not load run <code>./lab-init.sh</code> again in <code>~/analytics-codelab</code>. It is safe at any time and your changes are kept. <code>./lab-init.sh --info</code> prints the addresses and the password without changing anything.</p>
 <h3>The files</h3>
@@ -136,66 +147,121 @@
 <td style="border: 1px solid #333; padding: 8px;">Chart helpers shared by the pages</td>
 </tr>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>dashboard/sample/</code></td>
-<td style="border: 1px solid #333; padding: 8px;">Sample data the dashboard uses until the pipeline has filled the tables</td>
-</tr>
-<tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>data/generate.py</code></td>
 <td style="border: 1px solid #333; padding: 8px;">The synthetic data generator</td>
 </tr>
 </tbody>
 </table>
-<h2>3. Look at the data</h2>
-<p>The lab starts with synthetic data already loaded into the FHIR server and already run through the pipeline.</p>
+<h2>3. Look at the data on the FHIR server</h2>
+<p>A FHIR server stores each record as a resource: a nested JSON document with a type, such as Patient or Encounter. Applications read it with the FHIR search API, which is just web addresses. The lab opens the server to reading from your browser. Everything here is read only.</p>
+<p>The addresses below all start with the address of your lab. The quickest way to use them is to click <strong>FHIR server</strong> at the bottom of the Editor, and then change the end of the address in the browser bar.</p>
 <ol>
 <li>
-<p>Open the Dashboard tab. You should see the number of patients, households, visits and vaccine doses, and three charts.</p>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Count the patients.</strong> The first tab you opened already shows it. The <code>total</code> is the number of Patient resources.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?_summary=count
+</code></pre>
 </li>
 <li>
-<p>In the Editor terminal, compare the FHIR server with the flat tables.</p>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>See the first three patients.</strong> <code>_count</code> sets how many resources come back.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?_count=3
+</code></pre>
+<p>Each entry is one Patient. Find <code>gender</code>, <code>birthDate</code> and <code>name</code>. Note the <code>id</code> of the first one.</p>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Open one patient.</strong> Put the id you noted at the end.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient/&lt;the id&gt;
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Search.</strong> Everything after the question mark is a search parameter. Try these.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?gender=female&amp;_summary=count
+/fhir/Patient?birthdate=ge2022-01-01&amp;_count=5
+/fhir/Encounter?_count=2
+/fhir/Immunization?_summary=count
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Find the Sengmany family.</strong> Somsak is a newborn in the SMART Trust demonstrator. This search returns him together with the vaccine doses that point at him.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?name=Somsak&amp;_revinclude=Immunization:patient
+</code></pre>
+</li>
+<li>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Count from the terminal.</strong> Switch to the Editor and open the Terminal. The lab sets <code>FHIR_URL</code> for you.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">curl -s &quot;$FHIR_URL/Patient?_summary=count&quot; | jq .total
+curl -s &quot;$FHIR_URL/Encounter?_summary=count&quot; | jq .total
+</code></pre>
+</li>
+</ol>
+<p>This is the shape of data a FHIR server holds: deeply nested, one resource at a time. It is good for an app that shows one patient. It is hard to count with. That is what the next step is for.</p>
+<h3>The dashboard is empty so far</h3>
+<p>Click <strong>Dashboard</strong> at the bottom of the Editor. The page says there is no data in the analytics database yet. The data is on the FHIR server, but nothing has moved it into the flat tables the dashboard reads. In the Terminal, compare the two.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
 </code></pre>
-<p>Both columns should show the same numbers. The flat table counts are of distinct ids, because a table row is repeated when a resource has several codings.</p>
+<p>The FHIR server column has numbers and the flat table column says <code>none</code>. Keep the Dashboard tab open. You will watch it fill.</p>
+<h2>4. What the pipeline does</h2>
+<p>FHIR Data Pipes is a set of pipelines that turn nested FHIR resources into flat tables, so that ordinary SQL and dashboard tools can use them. It has three parts you will meet.</p>
+<ul>
+<li><strong>The pipeline</strong> reads the resources from the FHIR server and writes the tables.</li>
+<li><strong>The controller</strong> starts the pipeline, either on a schedule or when you press a button, and keeps a list of the runs. The Pipelines tab is the controller.</li>
+<li><strong>ViewDefinitions</strong> say which fields become which columns. They are FHIR resources too, written to the SQL on FHIR standard, so you change what a table holds by editing a JSON file and not by writing code.</li>
+</ul>
+<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MjAgMzMwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkEgbmVzdGVkIFBhdGllbnQgcmVzb3VyY2UgYmVjb21lcyB0d28gcm93cyBvZiBhIGZsYXQgdGFibGUgYmVjYXVzZSBpdCBoYXMgdHdvIG5hbWVzIj4KICA8c3R5bGU+CiAgICB0ZXh0IHsgZm9udC1mYW1pbHk6IEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7IGZpbGw6ICMxYjFiMWI7IH0KICAgIC50IHsgZm9udC1zaXplOiAxNXB4OyBmb250LXdlaWdodDogNzAwOyB9CiAgICAubSB7IGZvbnQtZmFtaWx5OiAiQ291cmllciBOZXciLCBtb25vc3BhY2U7IGZvbnQtc2l6ZTogMTIuNXB4OyB9CiAgICAucyB7IGZvbnQtc2l6ZTogMTIuNXB4OyBmaWxsOiAjNTU1OyB9CiAgICAuaCB7IGZvbnQtc2l6ZTogMTIuNXB4OyBmb250LXdlaWdodDogNzAwOyB9CiAgICAuYm94IHsgZmlsbDogI2ZmZjsgc3Ryb2tlOiAjY2ZjZmNhOyBzdHJva2Utd2lkdGg6IDEuNTsgfQogICAgLmFycm93IHsgc3Ryb2tlOiAjNzc3OyBzdHJva2Utd2lkdGg6IDI7IGZpbGw6IG5vbmU7IG1hcmtlci1lbmQ6IHVybCgjYWgpOyB9CiAgPC9zdHlsZT4KICA8ZGVmcz48bWFya2VyIGlkPSJhaCIgdmlld0JveD0iMCAwIDEwIDEwIiByZWZYPSI5IiByZWZZPSI1IiBtYXJrZXJXaWR0aD0iOCIgbWFya2VySGVpZ2h0PSI4IiBvcmllbnQ9ImF1dG8iPjxwYXRoIGQ9Ik0wIDBMMTAgNUwwIDEweiIgZmlsbD0iIzc3NyIvPjwvbWFya2VyPjwvZGVmcz4KICA8cmVjdCB3aWR0aD0iOTIwIiBoZWlnaHQ9IjMzMCIgZmlsbD0iI2ZjZmNmYiIvPgoKICA8dGV4dCBjbGFzcz0idCIgeD0iMjAiIHk9IjI4Ij4xLiBBIEZISVIgcmVzb3VyY2UgKG5lc3RlZCBKU09OKTwvdGV4dD4KICA8cmVjdCBjbGFzcz0iYm94IiB4PSIyMCIgeT0iNDAiIHdpZHRoPSIyNzAiIGhlaWdodD0iMjUwIiByeD0iMTAiLz4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjY2Ij57ICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iODYiPiAgImlkIjogInAxIiw8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIxMDYiPiAgImdlbmRlciI6ICJmZW1hbGUiLDwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjEyNiI+ICAiYmlydGhEYXRlIjogIjIwMjEtMDQtMDkiLDwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQiIHk9IjE0NiI+ICAibmFtZSI6IFs8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIxNjYiPiAgICB7ICJmYW1pbHkiOiAiRGFyYSIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMTg2Ij4gICAgICAiZ2l2ZW4iOiBbIkFtaW5hIl0gfSw8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIyMDYiPiAgICB7ICJmYW1pbHkiOiAiRGFyYSIsPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMjI2Ij4gICAgICAiZ2l2ZW4iOiBbIk1pbmEiXSB9PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNCIgeT0iMjQ2Ij4gIF08L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0IiB5PSIyNjYiPn08L3RleHQ+CgogIDx0ZXh0IGNsYXNzPSJ0IiB4PSIzMzAiIHk9IjI4Ij4yLiBBIFZpZXdEZWZpbml0aW9uPC90ZXh0PgogIDxyZWN0IGNsYXNzPSJib3giIHg9IjMzMCIgeT0iNDAiIHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiByeD0iMTAiLz4KICA8cmVjdCB4PSIzMzAiIHk9IjQwIiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZWI2ODM0Ii8+CiAgPHRleHQgY2xhc3M9InMiIHg9IjM0NCIgeT0iNzIiPnJlc291cmNlOiBQYXRpZW50PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjEwMCI+Q29sdW1ucyB0YWtlbiBvbmNlOjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQ0IiB5PSIxMjAiPmlkICAgICAgICAgLT4gaWQ8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0NCIgeT0iMTQwIj5nZW5kZXIgICAgIC0+IGdlbmRlcjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iMzQ0IiB5PSIxNjAiPmJpcnRoRGF0ZSAgLT4gYmlydGhfZGF0ZTwvdGV4dD4KICA8dGV4dCBjbGFzcz0icyIgeD0iMzQ0IiB5PSIxOTIiPkZvciBlYWNoIG5hbWU6PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSIzNDQiIHk9IjIxMiI+ZmFtaWx5ICAgICAtPiBmYW1pbHk8L3RleHQ+CiAgPHRleHQgY2xhc3M9Im0iIHg9IjM0NCIgeT0iMjMyIj5naXZlblswXSAgIC0+IGdpdmVuPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjI2NiI+QSB3aGVyZSBsaW5lIGtlZXBzIG9ubHkgdGhlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSIzNDQiIHk9IjI4MiI+cmVzb3VyY2VzIHlvdSB3YW50LjwvdGV4dD4KCiAgPHRleHQgY2xhc3M9InQiIHg9IjYyMCIgeT0iMjgiPjMuIEEgZmxhdCB0YWJsZSAoU1FMKTwvdGV4dD4KICA8cmVjdCBjbGFzcz0iYm94IiB4PSI2MjAiIHk9IjQwIiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjEzMCIgcng9IjEwIi8+CiAgPHJlY3QgeD0iNjIwIiB5PSI0MCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIzMCIgcng9IjEwIiBmaWxsPSIjZjFmMGVjIi8+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjYzMiIgeT0iNjAiPmlkPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJoIiB4PSI2NjUiIHk9IjYwIj5nZW5kZXI8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjcyNSIgeT0iNjAiPmJpcnRoX2RhdGU8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImgiIHg9IjgwNSIgeT0iNjAiPmdpdmVuPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI2MzIiIHk9Ijk1Ij5wMTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iNjY1IiB5PSI5NSI+ZmVtYWxlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI3MjUiIHk9Ijk1Ij4yMDIxLTA0LTA5PC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI4MDUiIHk9Ijk1Ij5BbWluYTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iNjMyIiB5PSIxMzAiPnAxPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI2NjUiIHk9IjEzMCI+ZmVtYWxlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJtIiB4PSI3MjUiIHk9IjEzMCI+MjAyMS0wNC0wOTwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibSIgeD0iODA1IiB5PSIxMzAiPk1pbmE8L3RleHQ+CiAgPHRleHQgY2xhc3M9InMiIHg9IjYyMCIgeT0iMTk4Ij5Ud28gbmFtZXMgbWFrZSB0d28gcm93cy4gVGhpcyBpcyB3aHkgdGhlPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI2MjAiIHk9IjIxNiI+ZGFzaGJvYXJkIGNvdW50cyBkaXN0aW5jdCBpZHM6IGl0IHdvdWxkPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJzIiB4PSI2MjAiIHk9IjIzNCI+b3RoZXJ3aXNlIGNvdW50IHRoaXMgcGF0aWVudCB0d2ljZS48L3RleHQ+CgogIDxwYXRoIGNsYXNzPSJhcnJvdyIgZD0iTTI5MiAxNjVIMzI2Ii8+CiAgPHBhdGggY2xhc3M9ImFycm93IiBkPSJNNTgyIDEwNUg2MTYiLz4KPC9zdmc+Cg==" alt="A nested Patient resource with two names becomes two rows of a flat table" style="max-width: 100%; height: auto; border: 1px solid #ddd;" /></p>
+<h3>Look at a ViewDefinition</h3>
+<p>Open <code>pipeline/config/views/patient_flat_view.json</code> in the Editor.</p>
+<ul>
+<li><code>&quot;resource&quot;: &quot;Patient&quot;</code> says which resource type the view reads.</li>
+<li><code>&quot;name&quot;: &quot;patient_flat&quot;</code> is the name of the table the pipeline makes.</li>
+<li>Each entry in a <code>column</code> list is a table column. The <code>path</code> is a FHIRPath expression into the resource, and the <code>name</code> is the column.</li>
+<li>A <code>forEachOrNull</code> makes one row for each item in a list, here each name. A patient with two names gets two rows, which is why the dashboard counts distinct ids.</li>
+</ul>
+<p>The lab has one view for each of 13 resource types. They are listed in <code>pipeline/config/application.yaml</code>.</p>
+<h3>Run the pipeline from the Pipelines tab</h3>
+<ol>
+<li>
+<p>Click <strong>Pipelines</strong> at the bottom of the Editor.</p>
 </li>
 <li>
-<p>Look at one resource on the FHIR server. Open this address in a new tab, with your own name in place of the example.</p>
-<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">https://203-0-113-10.sslip.io/fhir/Patient/trustdemo-somsak
+<p>Click <strong>Run Full</strong>. A full run reads all the resources and builds the tables from scratch. <strong>Run Incremental</strong> reads only what changed since the last run, which you will use later.</p>
+</li>
+<li>
+<p>The run takes a few minutes. Follow it in the Pipelines tab, where the latest result appears under the list of snapshots, and in the Terminal.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
 </code></pre>
-<p>This is Somsak SENGMANY, the newborn at the centre of the SMART Trust demonstrator. His household, his parents and his four vaccine doses are in the data too. Open <code>/fhir/Immunization?patient=trustdemo-somsak</code> to see them.</p>
+<p>Run it again every half minute. The flat table column fills in, one resource type after another, until it matches the FHIR server column.</p>
 </li>
 </ol>
-<h2>4. Run the pipeline</h2>
-<p>The pipeline reads every resource of the types it is set up for, applies each ViewDefinition, and writes a table for each one.</p>
-<h3>Look at a ViewDefinition</h3>
-<p>Open <code>pipeline/config/views/patient_flat_view.json</code> in the Editor. Each entry in a <code>column</code> list is a table column. It has a FHIRPath <code>path</code> into the resource and a <code>name</code>. The first lines read the resource key, the gender and the birth date. A <code>forEachOrNull</code> makes a row for each name or each general practitioner, which is why a patient with two names appears twice in the table.</p>
-<h3>Run it from the Pipelines tab</h3>
-<ol>
-<li>Open the Pipelines tab.</li>
-<li>Click the button to run the full pipeline. Wait until the run is listed as finished.</li>
-<li>In the Editor terminal run <code>pipeline-status</code>. The flat table column matches the FHIR server column.</li>
-</ol>
-<h3>Run it from the terminal</h3>
+<h3>Or run it from the terminal</h3>
+<p>The Terminal can start the same run and follow it for you.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline
 </code></pre>
-<p>It starts a full run and follows it until the tables hold what the FHIR server holds. It does the same as the Pipelines tab.</p>
 <h3>Look at the tables</h3>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">psql -c &quot;\dt&quot;
 psql -c &quot;SELECT gender, count(DISTINCT id) FROM patient_flat GROUP BY gender&quot;
 </code></pre>
-<p>The connection settings are already in your terminal.</p>
-<h2>5. How the dashboard reads the tables</h2>
-<p>Observable Framework builds a static site. Each file in <code>dashboard/src/data</code> that ends in <code>.csv.sh</code> is a data loader. When the site is built, the loader runs, and the page reads its output with <code>FileAttachment</code>.</p>
+<p>The connection settings are already in your terminal. Notice the <code>\dt</code> with a backslash.</p>
+<h2>5. Watch the dashboard fill</h2>
+<p>Switch to the Dashboard tab. You do not have to do anything. About 30 seconds after the flat tables change, the lab rebuilds the dashboard, and the tab reloads by itself. The page now shows patients, households, visits and vaccine doses, three charts, and a bar chart of the rows in each flat table. The Immunization page shows the vaccine doses.</p>
+<p>If you do not want to wait, click <strong>Refresh dashboard</strong> at the bottom of the Editor, or type <code>refresh</code> in the Terminal.</p>
+<h3>How the dashboard reads the tables</h3>
+<p>Observable Framework builds a static site. Each file in <code>dashboard/src/data</code> that ends in <code>.csv.sh</code> is a data loader. When the site is built, the loader runs a SQL query and prints a CSV, and the page reads it with <code>FileAttachment</code>.</p>
 <ol>
 <li>Open <code>dashboard/src/data/gender_age.csv.sh</code>. It is a SQL query over <code>patient_flat</code> that groups patients by gender and age group.</li>
-<li>Open <code>dashboard/src/index.md</code>. The first block loads each loader's CSV. The next lines draw them with the chart helpers.</li>
+<li>Open <code>dashboard/src/index.md</code>. The first block loads each CSV. The lines below it draw them with the helpers in <code>components/charts.js</code>.</li>
 </ol>
 <h3>Change a query</h3>
 <ol>
-<li>In <code>gender_age.csv.sh</code>, change the age group boundary from <code>15</code> to <code>18</code> in the line that makes the <code>5-14</code> group, and rename the group <code>5-17</code>.</li>
-<li>Save the file. The Pipeline log shows the build and then <code>BUILD OK</code>.</li>
+<li>In <code>gender_age.csv.sh</code>, make three small changes so that the second group becomes ages 5 to 17 and the third starts at 18.
+<ul>
+<li><code>&lt; 15</code> becomes <code>&lt; 18</code></li>
+<li><code>'5-14'</code> becomes <code>'5-17'</code></li>
+<li><code>'15-24'</code> becomes <code>'18-24'</code></li>
+</ul>
+</li>
+<li>Open <code>dashboard/src/index.md</code> and change <code>&quot;5-14&quot;, &quot;15-24&quot;</code> in the <code>order</code> list to <code>&quot;5-17&quot;, &quot;18-24&quot;</code>.</li>
+<li>Save both files. The Pipeline log shows the build and then <code>BUILD OK</code>.</li>
 <li>Switch to the Dashboard tab. It reloads, and the chart uses the new groups.</li>
 </ol>
-<p>Saving a loader rebuilds the dashboard by itself. A change in the database does not, because the dashboard only reads the tables when it is built. That is why the next sections end with <code>refresh</code>.</p>
+<p>Saving a file in <code>dashboard/src</code> rebuilds the dashboard at once. A change in the database does not, because the dashboard only reads the tables when it is built. The lab watches the tables for you and rebuilds when they change.</p>
 <h2>6. Change a ViewDefinition</h2>
 <p>A ViewDefinition decides which resources become rows and which fields become columns. You will change the Patient view so that it keeps only female patients, and watch the dashboard follow.</p>
 <ol>
@@ -211,22 +277,18 @@ psql -c &quot;SELECT gender, count(DISTINCT id) FROM patient_flat GROUP BY gende
 </code></pre>
 </li>
 <li>
-<p>Save the file. Nothing changes yet, because the pipeline has not run.</p>
+<p>Save the file. Nothing changes yet, because the pipeline has not run again.</p>
 </li>
 <li>
-<p>Run the pipeline and then rebuild the dashboard.</p>
-<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline
-refresh
-</code></pre>
+<p>Run a full pipeline from the Pipelines tab, or type <code>run-pipeline</code> in the Terminal.</p>
 </li>
 <li>
-<p>Switch to the Dashboard tab. The patient number has dropped and the gender chart has only one gender.</p>
+<p>Watch the Dashboard tab. The patient number drops and the gender chart has one gender. The Patient bar in the rows chart gets shorter.</p>
 </li>
 <li>
 <p>Put it back.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">reset-views
 run-pipeline
-refresh
 </code></pre>
 </li>
 </ol>
@@ -239,19 +301,18 @@ refresh
 </code></pre>
 </li>
 <li>
-<p>Compare the two sides.</p>
+<p>Open the FHIR server tab and reload the count. It has grown. Then compare the two sides in the Terminal.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
 </code></pre>
 <p>The FHIR server now holds more patients than the flat tables. The pipeline has not seen them yet.</p>
 </li>
 <li>
-<p>Run only what changed.</p>
+<p>Run only what changed. Click <strong>Run Incremental</strong> in the Pipelines tab, or type this.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline --incremental
-refresh
 </code></pre>
 </li>
 <li>
-<p>Look at the Dashboard tab. The numbers have grown.</p>
+<p>Watch the Dashboard tab. The numbers grow after about 30 seconds.</p>
 </li>
 </ol>
 <p>You can also add one resource by hand, with the same request a real app makes.</p>
@@ -260,7 +321,7 @@ refresh
 </code></pre>
 <p>The patient has none of the location tags the other patients carry, so the tables count it but the village based queries do not.</p>
 <h2>8. Congratulations!</h2>
-<p style="border-left: 4px solid #2e7d32; background: #e8f5e9; padding: 8px 12px;">You followed FHIR data from a server to a dashboard, changed a ViewDefinition and a query, and brought new data through the pipeline.</p>
+<p style="border-left: 4px solid #2e7d32; background: #e8f5e9; padding: 8px 12px;">You looked at FHIR data on a server, ran it through a pipeline into flat tables, watched a dashboard fill, changed a ViewDefinition and a query, and brought new data through.</p>
 <h3>Next steps</h3>
 <ul>
 <li>Switch on the three views in <code>pipeline/views-extra</code>. Copy one into <code>pipeline/config/views</code>, add its resource type to <code>resourceList</code> in <code>pipeline/config/application.yaml</code>, and restart the controller with <code>docker restart an-pipeline</code> from the VM terminal.</li>
@@ -277,8 +338,16 @@ refresh
 </thead>
 <tbody>
 <tr>
-<td style="border: 1px solid #333; padding: 8px;">The Dashboard tab shows sample data</td>
-<td style="border: 1px solid #333; padding: 8px;">The pipeline has not filled the tables yet. Run <code>run-pipeline</code>, then <code>refresh</code>. The Pipeline log says which data the last build used.</td>
+<td style="border: 1px solid #333; padding: 8px;">The Dashboard says there is no data yet</td>
+<td style="border: 1px solid #333; padding: 8px;">The pipeline has not run. Click <strong>Run Full</strong> in the Pipelines tab, or type <code>run-pipeline</code>.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">The FHIR server tab shows a count of 0</td>
+<td style="border: 1px solid #333; padding: 8px;">The data is still loading. Wait a minute and watch the Pipeline log.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #333; padding: 8px;">The Dashboard did not change after the pipeline finished</td>
+<td style="border: 1px solid #333; padding: 8px;">Wait 30 seconds, or click <strong>Refresh dashboard</strong>. The Pipeline log says which data the last build used.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>refresh</code> says the build failed</td>
@@ -286,7 +355,7 @@ refresh
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;">The pipeline run stays on running</td>
-<td style="border: 1px solid #333; padding: 8px;">A full run on this lab takes a few minutes. Follow it in the Pipelines tab.</td>
+<td style="border: 1px solid #333; padding: 8px;">A full run takes a few minutes. Follow it in the Pipelines tab.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #333; padding: 8px;"><code>pipeline-status</code> shows <code>none</code> in the flat table column</td>

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Runs once, in the background, when the lab first starts with an empty FHIR
-# server. It loads the synthetic data, runs the pipeline and builds the
-# dashboard. A lab started from the saved template finds all of it done.
+# server. It loads the synthetic data and builds the empty dashboard. It does
+# NOT run the pipeline: the learner does that, so they see the numbers appear.
+# A lab started from the saved template finds the data already loaded.
 set -uo pipefail
 STATE="$HOME/.codelab"; mkdir -p "$STATE"
 LOG="$HOME/build.log"
@@ -16,12 +17,6 @@ else
   say "The FHIR server already holds $total patients"
 fi
 
-until curl -fsS "$PIPES_URL/" >/dev/null 2>&1; do sleep 5; done
-have="$(psql -X -t -A -c "SELECT count(DISTINCT id) FROM patient_flat" 2>/dev/null || echo 0)"
-if [[ "${have:-0}" -eq 0 ]]; then
-  say "Running the pipeline for the first time"
-  run-pipeline >> "$LOG" 2>&1 || say "The first pipeline run did not finish. Use the Pipelines tab."
-fi
 build-dashboard || true
 touch "$STATE/seeded"
-say "The lab is ready"
+say "The lab is ready. The FHIR server holds the data. Run the pipeline to fill the tables."

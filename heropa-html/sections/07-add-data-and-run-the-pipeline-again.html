@@ -6,19 +6,18 @@
 </code></pre>
 </li>
 <li>
-<p>Compare the two sides.</p>
+<p>Open the FHIR server tab and reload the count. It has grown. Then compare the two sides in the Terminal.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
 </code></pre>
 <p>The FHIR server now holds more patients than the flat tables. The pipeline has not seen them yet.</p>
 </li>
 <li>
-<p>Run only what changed.</p>
+<p>Run only what changed. Click <strong>Run Incremental</strong> in the Pipelines tab, or type this.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline --incremental
-refresh
 </code></pre>
 </li>
 <li>
-<p>Look at the Dashboard tab. The numbers have grown.</p>
+<p>Watch the Dashboard tab. The numbers grow after about 30 seconds.</p>
 </li>
 </ol>
 <p>You can also add one resource by hand, with the same request a real app makes.</p>

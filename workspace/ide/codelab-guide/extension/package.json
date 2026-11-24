@@ -2,7 +2,7 @@
   "name": "codelab-guide",
   "displayName": "Codelab guide",
   "description": "Lays out the dashboard code, the pipeline log, a terminal and the course manual when the editor opens.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "publisher": "ohs",
   "engines": {
     "vscode": "^1.80.0"
@@ -39,6 +39,10 @@
       {
         "command": "codelab.runPipeline",
         "title": "Codelab: Run the pipeline"
+      },
+      {
+        "command": "codelab.openFhir",
+        "title": "Codelab: Open the FHIR server in a browser tab"
       },
       {
         "command": "codelab.openPipelines",

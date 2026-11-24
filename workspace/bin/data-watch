@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Rebuilds the dashboard when the flat tables change, so a learner who runs the
+# pipeline sees the numbers move without a click. Checks every 15 seconds. It
+# waits until the counts stop changing, so one pipeline run makes one build.
+set -uo pipefail
+TABLES="patient_flat group_flat encounter_flat immunization_flat observation_flat condition_flat"
+signature() {
+  local t out=""
+  for t in $TABLES; do
+    out="$out $(psql -X -q -w -t -A -c "SELECT count(*) FROM $t" 2>/dev/null || echo x)"
+  done
+  echo "$out"
+}
+built="$(signature)"; last="$built"
+while true; do
+  sleep 15
+  now="$(signature)"
+  if [[ "$now" == "$last" && "$now" != "$built" ]]; then
+    echo "[$(date +%T)] The flat tables changed. Rebuilding the dashboard." >> "$HOME/build.log"
+    build-dashboard || true
+    built="$now"
+  fi
+  last="$now"
+done

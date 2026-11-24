@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Vaccine doses by vaccine and month.
-source "$(dirname "$0")/../../scripts/lib.sh"
+. "$(dirname "$0")/../../scripts/lib.sh"
 query_or_sample vaccines.csv <<'SQL'
 SELECT to_char(date_trunc('month', occurrence_date::timestamp), 'YYYY-MM') AS month,
        coalesce(vaccine_short_name, 'Other') AS vaccine,

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 330" role="img" aria-label="A nested Patient resource becomes two rows of a flat table because it has two names">
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #1b1b1b; }
+    .t { font-size: 15px; font-weight: 700; }
+    .m { font-family: "Courier New", monospace; font-size: 12.5px; }
+    .s { font-size: 12.5px; fill: #555; }
+    .h { font-size: 12.5px; font-weight: 700; }
+    .box { fill: #fff; stroke: #cfcfca; stroke-width: 1.5; }
+    .arrow { stroke: #777; stroke-width: 2; fill: none; marker-end: url(#ah); }
+  </style>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#777"/></marker></defs>
+  <rect width="920" height="330" fill="#fcfcfb"/>
+
+  <text class="t" x="20" y="28">1. A FHIR resource (nested JSON)</text>
+  <rect class="box" x="20" y="40" width="270" height="250" rx="10"/>
+  <text class="m" x="34" y="66">{ "resourceType": "Patient",</text>
+  <text class="m" x="34" y="86">  "id": "p1",</text>
+  <text class="m" x="34" y="106">  "gender": "female",</text>
+  <text class="m" x="34" y="126">  "birthDate": "2021-04-09",</text>
+  <text class="m" x="34" y="146">  "name": [</text>
+  <text class="m" x="34" y="166">    { "family": "Dara",</text>
+  <text class="m" x="34" y="186">      "given": ["Amina"] },</text>
+  <text class="m" x="34" y="206">    { "family": "Dara",</text>
+  <text class="m" x="34" y="226">      "given": ["Mina"] }</text>
+  <text class="m" x="34" y="246">  ]</text>
+  <text class="m" x="34" y="266">}</text>
+
+  <text class="t" x="330" y="28">2. A ViewDefinition</text>
+  <rect class="box" x="330" y="40" width="250" height="250" rx="10"/>
+  <rect x="330" y="40" width="250" height="6" rx="3" fill="#eb6834"/>
+  <text class="s" x="344" y="72">resource: Patient</text>
+  <text class="s" x="344" y="100">Columns taken once:</text>
+  <text class="m" x="344" y="120">id         -> id</text>
+  <text class="m" x="344" y="140">gender     -> gender</text>
+  <text class="m" x="344" y="160">birthDate  -> birth_date</text>
+  <text class="s" x="344" y="192">For each name:</text>
+  <text class="m" x="344" y="212">family     -> family</text>
+  <text class="m" x="344" y="232">given[0]   -> given</text>
+  <text class="s" x="344" y="266">A where line keeps only the</text>
+  <text class="s" x="344" y="282">resources you want.</text>
+
+  <text class="t" x="620" y="28">3. A flat table (SQL)</text>
+  <rect class="box" x="620" y="40" width="280" height="130" rx="10"/>
+  <rect x="620" y="40" width="280" height="30" rx="10" fill="#f1f0ec"/>
+  <text class="h" x="632" y="60">id</text>
+  <text class="h" x="665" y="60">gender</text>
+  <text class="h" x="725" y="60">birth_date</text>
+  <text class="h" x="805" y="60">given</text>
+  <text class="m" x="632" y="95">p1</text>
+  <text class="m" x="665" y="95">female</text>
+  <text class="m" x="725" y="95">2021-04-09</text>
+  <text class="m" x="805" y="95">Amina</text>
+  <text class="m" x="632" y="130">p1</text>
+  <text class="m" x="665" y="130">female</text>
+  <text class="m" x="725" y="130">2021-04-09</text>
+  <text class="m" x="805" y="130">Mina</text>
+  <text class="s" x="620" y="198">Two names make two rows. This is why the</text>
+  <text class="s" x="620" y="216">dashboard counts distinct ids: it would</text>
+  <text class="s" x="620" y="234">otherwise count this patient twice.</text>
+
+  <path class="arrow" d="M292 165H326"/>
+  <path class="arrow" d="M582 105H616"/>
+</svg>

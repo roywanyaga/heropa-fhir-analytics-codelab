@@ -144,9 +144,9 @@ print_addresses() {
     cat <<EOF
   Editor            $LAB_URL/ide/
   Editor password   $password
-  Dashboard         $LAB_URL/dashboard/
+  FHIR server       $LAB_URL/fhir/Patient?_summary=count
   Pipelines         $(pipes_url)
-  FHIR server       $LAB_URL/fhir/metadata
+  Dashboard         $LAB_URL/dashboard/
 EOF
     [[ "$LAB_MODE" == full ]] || printf '  Pipeline log      %s/buildlog/\n' "$LAB_URL"
 }

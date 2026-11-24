@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Patients by gender and age group.
-source "$(dirname "$0")/../../scripts/lib.sh"
+. "$(dirname "$0")/../../scripts/lib.sh"
 query_or_sample gender_age.csv <<'SQL'
 SELECT
   coalesce(gender, 'unknown') AS gender,

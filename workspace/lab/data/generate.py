@@ -885,8 +885,8 @@ def main():
     )
     parser.add_argument("--fhir-url",   default="http://localhost:8091/fhir",
                         help="HAPI FHIR base URL")
-    parser.add_argument("--patients",   type=int, default=10_000,
-                        help="Target patient count (default: 10 000)")
+    parser.add_argument("--patients",   type=int, default=300,
+                        help="Target patient count (default: 300)")
     parser.add_argument("--batch-size", type=int, default=500,
                         help="Resources per batch bundle (default: 500)")
     parser.add_argument("--dry-run",    action="store_true",
@@ -917,11 +917,15 @@ def main():
     print("Infrastructure...")
     infra = build_infrastructure(client)
 
-    print("Patients and clinical resources...")
-    build_patients(client, infra, args.patients)
+    # The family goes in first and is flushed on its own, so it is on the
+    # server even if a later batch fails.
     if not args.no_demo_family:
         print("The Sengmany family (SMART Trust demonstrator)...")
         build_demo_family(client, infra)
+        client.flush()
+
+    print("Patients and clinical resources...")
+    build_patients(client, infra, args.patients)
     client.flush()
 
     client.summary()

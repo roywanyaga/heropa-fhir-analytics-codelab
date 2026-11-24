@@ -28,20 +28,21 @@
 <body>
 <main>
   <h1>FHIR analytics codelab</h1>
-  <p>Your lab has three parts. Open each one in its own tab and keep them open.</p>
+  <p>Your lab has four parts, in the order you use them. Open each one in its own tab and keep them open.</p>
   <div class="cards">
     <a class="card" href="/ide/" target="_blank" rel="noopener"><strong>Editor</strong>The ViewDefinitions, the dashboard code, the guide and a terminal. It asks for the password your lab printed.</a>
-    <a class="card" href="/preview/" target="_blank" rel="noopener"><strong>Dashboard</strong>The Observable Framework dashboard. It reloads after each build.</a>
+    <a class="card" href="/fhir/Patient?_summary=count" target="_blank" rel="noopener"><strong>FHIR server</strong>The data as FHIR resources. Read it with an address, for example /fhir/Patient?_count=3.</a>
     <a class="card" id="pipes" href="#" target="_blank" rel="noopener"><strong>Pipelines</strong>The FHIR Data Pipes controller. Run the pipeline from here.</a>
+    <a class="card" href="/preview/" target="_blank" rel="noopener"><strong>Dashboard</strong>The Observable Framework dashboard. It reloads after each build.</a>
   </div>
   <div class="qr" hidden>
     <img src="/qr/app.svg" alt="QR code for the Dashboard address" onload="this.parentNode.hidden = false">
     <p><strong>Scan the QR code to open the dashboard on your phone</strong>Point the camera of the phone at the code.</p>
   </div>
   <ol>
+    <li>Look at the data in the FHIR server tab.</li>
     <li>Run the pipeline in the Pipelines tab, or with <code>run-pipeline</code> in the Editor terminal.</li>
-    <li>Run <code>refresh</code> in the terminal to rebuild the dashboard from the new tables.</li>
-    <li>Switch to the Dashboard tab. It reloads by itself.</li>
+    <li>Switch to the Dashboard tab. It rebuilds and reloads by itself about 30 seconds after the tables change.</li>
   </ol>
 </main>
 <script>
