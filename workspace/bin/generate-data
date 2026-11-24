@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Makes synthetic FHIR resources and loads them into the lab's FHIR server.
+#
+#   generate-data                       the lab's usual data, about 300 patients
+#   generate-data --patients 50         adds about 50 more patients
+#   generate-data --patients 50 --seed 7 --no-demo-family
+#
+# Every run ADDS resources. They get new ids, so nothing is overwritten. The
+# Sengmany family from the SMART Trust demonstrator has fixed ids and is
+# written again as it was, not duplicated.
+set -euo pipefail
+exec python3 "$CODELAB_DIR/data/generate.py" \
+    --fhir-url "${FHIR_URL:-http://hapi-fhir:8080/fhir}" \
+    "$@"

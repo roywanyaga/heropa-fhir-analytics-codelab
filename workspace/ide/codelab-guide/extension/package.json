@@ -1,0 +1,55 @@
+{
+  "name": "codelab-guide",
+  "displayName": "Codelab guide",
+  "description": "Lays out the dashboard code, the pipeline log, a terminal and the course manual when the editor opens.",
+  "version": "2.0.0",
+  "publisher": "ohs",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onWebviewPanel:codelab.build",
+    "onWebviewPanel:codelab.app",
+    "onWebviewPanel:codelab.output"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "codelab.openApp",
+        "title": "Codelab: Open the dashboard in a browser tab"
+      },
+      {
+        "command": "codelab.showGuide",
+        "title": "Codelab: Show the guide"
+      },
+      {
+        "command": "codelab.showBuild",
+        "title": "Codelab: Show the pipeline log"
+      },
+      {
+        "command": "codelab.showAll",
+        "title": "Codelab: Show every pane"
+      },
+      {
+        "command": "codelab.buildNow",
+        "title": "Codelab: Refresh the dashboard"
+      },
+      {
+        "command": "codelab.runPipeline",
+        "title": "Codelab: Run the pipeline"
+      },
+      {
+        "command": "codelab.openPipelines",
+        "title": "Codelab: Open the pipelines controller in a browser tab"
+      }
+    ],
+    "markdown.previewScripts": [
+      "./preview/copy.js"
+    ],
+    "markdown.previewStyles": [
+      "./preview/copy.css"
+    ]
+  }
+}

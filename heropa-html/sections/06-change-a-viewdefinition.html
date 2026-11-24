@@ -1,0 +1,35 @@
+<h2>6. Change a ViewDefinition</h2>
+<p>A ViewDefinition decides which resources become rows and which fields become columns. You will change the Patient view so that it keeps only female patients, and watch the dashboard follow.</p>
+<ol>
+<li>
+<p>Open <code>pipeline/config/views/patient_flat_view.json</code>.</p>
+</li>
+<li>
+<p>Add a <code>where</code> list after the <code>&quot;resource&quot;: &quot;Patient&quot;</code> line. The line before it ends in a comma, so keep the commas right.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">&quot;resource&quot;: &quot;Patient&quot;,
+&quot;where&quot;: [
+  { &quot;path&quot;: &quot;gender = 'female'&quot; }
+],
+</code></pre>
+</li>
+<li>
+<p>Save the file. Nothing changes yet, because the pipeline has not run.</p>
+</li>
+<li>
+<p>Run the pipeline and then rebuild the dashboard.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline
+refresh
+</code></pre>
+</li>
+<li>
+<p>Switch to the Dashboard tab. The patient number has dropped and the gender chart has only one gender.</p>
+</li>
+<li>
+<p>Put it back.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">reset-views
+run-pipeline
+refresh
+</code></pre>
+</li>
+</ol>
+<p>If the pipeline fails after your change, read the Pipeline log and the Pipelines tab. The most common cause is a missing comma or a bracket in the JSON. <code>reset-views</code> puts every view back as the lab shipped it.</p>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FHIR analytics codelab</title>
+  <style>
+    :root { color-scheme: light dark; --accent: #6200ee; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: Canvas; color: CanvasText; }
+    main { max-width: 760px; margin: 0 auto; padding: 48px 16px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    p { margin: 0 0 16px; }
+    .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 32px 0; }
+    a.card { display: block; padding: 20px; border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); border-radius: 12px; text-decoration: none; color: inherit; }
+    a.card:hover { border-color: var(--accent); }
+    a.card strong { display: block; font-size: 1.15rem; color: var(--accent); }
+    @media (prefers-color-scheme: dark) { :root { --accent: #bb86fc; } }
+    ol { padding-left: 20px; }
+    .qr { display: flex; gap: 16px; align-items: center; margin: 0 0 32px; }
+    .qr img { flex: none; width: 132px; height: 132px; border-radius: 8px; background: #fff; }
+    .qr[hidden] { display: none; }
+    .qr p { margin: 0; }
+    .qr strong { display: block; }
+    code { background: color-mix(in srgb, CanvasText 10%, transparent); padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>FHIR analytics codelab</h1>
+  <p>Your lab has three parts. Open each one in its own tab and keep them open.</p>
+  <div class="cards">
+    <a class="card" href="/ide/" target="_blank" rel="noopener"><strong>Editor</strong>The ViewDefinitions, the dashboard code, the guide and a terminal. It asks for the password your lab printed.</a>
+    <a class="card" href="/preview/" target="_blank" rel="noopener"><strong>Dashboard</strong>The Observable Framework dashboard. It reloads after each build.</a>
+    <a class="card" id="pipes" href="#" target="_blank" rel="noopener"><strong>Pipelines</strong>The FHIR Data Pipes controller. Run the pipeline from here.</a>
+  </div>
+  <div class="qr" hidden>
+    <img src="/qr/app.svg" alt="QR code for the Dashboard address" onload="this.parentNode.hidden = false">
+    <p><strong>Scan the QR code to open the dashboard on your phone</strong>Point the camera of the phone at the code.</p>
+  </div>
+  <ol>
+    <li>Run the pipeline in the Pipelines tab, or with <code>run-pipeline</code> in the Editor terminal.</li>
+    <li>Run <code>refresh</code> in the terminal to rebuild the dashboard from the new tables.</li>
+    <li>Switch to the Dashboard tab. It reloads by itself.</li>
+  </ol>
+</main>
+<script>
+  // The Controller UI is on port 8443 of the same name.
+  document.getElementById('pipes').href = location.protocol + '//' + location.hostname + ':8443/';
+</script>
+</body>
+</html>

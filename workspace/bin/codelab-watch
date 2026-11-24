@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Rebuilds the dashboard after every save in dashboard/src, and once at start.
+set -uo pipefail
+build-dashboard || true
+while true; do
+  inotifywait -q -r -e close_write,create,delete,move \
+    --exclude '(\.observablehq|node_modules|dist)' \
+    "$CODELAB_DIR/dashboard/src" "$CODELAB_DIR/dashboard/observablehq.config.js" >/dev/null 2>&1 || sleep 2
+  # Gather a burst of saves into one build.
+  sleep 1
+  build-dashboard || true
+done

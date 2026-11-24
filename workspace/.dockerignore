@@ -1,0 +1,4 @@
+lab/dashboard/node_modules
+lab/dashboard/dist
+lab/dashboard/src/.observablehq
+**/__pycache__

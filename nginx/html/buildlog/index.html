@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline log</title>
+  <style>
+    /* Always dark, to match the editor these pages sit inside. */
+    :root {
+      color-scheme: dark;
+      --bg: #1b1b1f; --text: #dcdce4; --muted: #8f8f9c; --line: #3a3a44;
+      --ok: #57c36f; --bad: #ff7b72; --hint: #e3b341; --bar: #25252b;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; background: var(--bg); color: var(--text); font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    #log { flex: 1 1 auto; overflow: auto; margin: 0; padding: 8px 12px 16px; white-space: pre-wrap; word-break: break-word; }
+    .task, .rule { color: var(--muted); }
+    .ok { color: var(--ok); font-weight: 700; }
+    .bad, .err { color: var(--bad); }
+    .bad { font-weight: 700; }
+    .hint { color: var(--hint); font-weight: 700; }
+    #latest { position: fixed; right: 16px; bottom: 12px; font: 12px system-ui, sans-serif; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bar); color: var(--text); cursor: pointer; display: none; }
+  </style>
+</head>
+<body>
+  <pre id="log">Waiting for the first build of the dashboard.</pre>
+  <button id="latest" type="button">Jump to the latest</button>
+<script>
+  // Shows the end of the build watcher's log and follows it. The watcher
+  // writes the file in the learner's home folder and nginx serves it.
+  const log = document.getElementById('log');
+  const latest = document.getElementById('latest');
+  const TAIL = 60000;
+  const HOME = 'file:///home/learner/kotlin-fhir-data-capture/codelabs/';
+  let shown = '';
+  let follow = true;
+
+  log.addEventListener('scroll', () => {
+    follow = log.scrollTop + log.clientHeight >= log.scrollHeight - 30;
+    latest.style.display = follow ? 'none' : 'block';
+  });
+  latest.addEventListener('click', () => { log.scrollTop = log.scrollHeight; });
+
+  function kind(line) {
+    if (/BUILD OK/.test(line)) return 'ok';
+    if (/BUILD FAILED/.test(line)) return 'bad';
+    if (/^e: /.test(line)) return 'err';
+    if (/^What to do/.test(line) || /^To (add|jump)/.test(line)) return 'hint';
+    if (/^> Task /.test(line)) return 'task';
+    if (/^-{20,}$/.test(line)) return 'rule';
+    return '';
+  }
+
+  function render(text) {
+    // Colour codes meant for a terminal are dropped, and long file paths are
+    // cut down to the part a learner sees in the Explorer.
+    const clean = text.replace(/\x1b\[[0-9;]*m/g, '').split(HOME).join('');
+    const lines = clean.split('\n');
+    const fragment = document.createDocumentFragment();
+    for (const line of lines) {
+      const span = document.createElement('span');
+      const cls = kind(line);
+      if (cls) span.className = cls;
+      span.textContent = line + '\n';
+      fragment.append(span);
+    }
+    log.replaceChildren(fragment);
+    if (follow) log.scrollTop = log.scrollHeight;
+  }
+
+  async function poll() {
+    try {
+      const response = await fetch('/build.log?t=' + Date.now(), { cache: 'no-store', headers: { Range: 'bytes=-' + TAIL } });
+      if (!response.ok) return;
+      let text = await response.text();
+      // A tail that starts mid line loses that partial line.
+      if (response.status === 206) text = text.slice(text.indexOf('\n') + 1);
+      if (text !== shown) {
+        shown = text;
+        render(text);
+      }
+    } catch (e) {}
+  }
+  poll();
+  setInterval(poll, 1500);
+</script>
+</body>
+</html>

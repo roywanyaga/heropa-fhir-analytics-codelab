@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Runs once, in the background, when the lab first starts with an empty FHIR
+# server. It loads the synthetic data, runs the pipeline and builds the
+# dashboard. A lab started from the saved template finds all of it done.
+set -uo pipefail
+STATE="$HOME/.codelab"; mkdir -p "$STATE"
+LOG="$HOME/build.log"
+say() { echo "[$(date +%T)] $*" >> "$LOG"; }
+
+until curl -fsS "$FHIR_URL/metadata" >/dev/null 2>&1; do sleep 5; done
+total="$(curl -fsS "$FHIR_URL/Patient?_summary=count" | jq -r '.total // 0')"
+if [[ "$total" -eq 0 ]]; then
+  say "The FHIR server is empty. Loading the synthetic data"
+  generate-data >> "$LOG" 2>&1 || { say "Loading the data failed"; exit 1; }
+else
+  say "The FHIR server already holds $total patients"
+fi
+
+until curl -fsS "$PIPES_URL/" >/dev/null 2>&1; do sleep 5; done
+have="$(psql -X -t -A -c "SELECT count(DISTINCT id) FROM patient_flat" 2>/dev/null || echo 0)"
+if [[ "${have:-0}" -eq 0 ]]; then
+  say "Running the pipeline for the first time"
+  run-pipeline >> "$LOG" 2>&1 || say "The first pipeline run did not finish. Use the Pipelines tab."
+fi
+build-dashboard || true
+touch "$STATE/seeded"
+say "The lab is ready"

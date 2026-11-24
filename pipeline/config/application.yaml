@@ -1,0 +1,42 @@
+# FHIR Data Pipes controller settings for the analytics codelab.
+# Taken from ohs-player-analytics/pipeline/config/application.yaml.
+# No Spark and no Hive. The views are flattened straight into Postgres.
+fhirdata:
+  fhirFetchMode: "FHIR_SEARCH"
+  # The compose file overrides this with FHIRDATA_FHIRSERVERURL.
+  fhirServerUrl: "http://hapi-fhir:8080/fhir"
+
+  dwhRootPrefix: "/dwh/controller_DWH"
+  # Kept on because the setup this was taken from ran with it on. Whether the
+  # controller also runs with it off is still to be tested on a lab VM.
+  generateParquetFiles: true
+
+  # The lab runs the pipeline by hand, from the Controller UI or with
+  # run-pipeline. The schedules below are far enough away not to get in the way.
+  incrementalSchedule: "0 0 3 * * *"
+  purgeSchedule: "0 30 3 * * *"
+  numOfDwhSnapshotsToRetain: 2
+
+  # The 13 resource types the lab has data for. The views for Procedure,
+  # MedicationRequest and DiagnosticReport are in pipeline/views-extra/.
+  resourceList: "Patient,Practitioner,PractitionerRole,Organization,Location,Group,RelatedPerson,Encounter,Condition,Observation,CarePlan,Task,Immunization"
+
+  numThreads: 2
+  autoGenerateFlinkConfiguration: true
+  fhirVersion: "R4"
+  structureDefinitionsPath: "classpath:/r4-us-core-definitions"
+  rowGroupSizeForParquetFiles: 33554432
+
+  createHiveResourceTables: false
+  viewDefinitionsDir: "config/views"
+  createParquetViews: false
+  # The compose file points this at config/postgres-analytics.json.
+  sinkDbConfigPath: "config/postgres-analytics.json"
+
+  recursiveDepth: 1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,pipeline-metrics

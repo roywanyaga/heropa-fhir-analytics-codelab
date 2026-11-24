@@ -1,0 +1,10 @@
+.env
+certs/
+letsencrypt/
+.claude/
+nginx/html/qr/
+node_modules/
+workspace/lab/dashboard/dist/
+workspace/lab/dashboard/src/.observablehq/
+__pycache__/
+_import.tar.gz

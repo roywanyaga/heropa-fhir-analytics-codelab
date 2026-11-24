@@ -1,0 +1,27 @@
+{
+  "workbench.startupEditor": "none",
+  "workbench.colorTheme": "Default Dark Modern",
+  "security.workspace.trust.enabled": false,
+  "files.autoSave": "off",
+  "editor.fontSize": 14,
+  "editor.minimap.enabled": false,
+  "editor.formatOnSave": false,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "git.enabled": true,
+  "git.autofetch": false,
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "none",
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "files.exclude": {
+    "**/.gradle": true,
+    "**/build": true,
+    "**/.kotlin": true,
+    "iosApp": true,
+    "kotlin-js-store": true,
+    "**/.vscode": true
+  },
+  "chat.disableAIFeatures": true,
+  "chat.commandCenter.enabled": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden"
+}

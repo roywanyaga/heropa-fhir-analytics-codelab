@@ -1,0 +1,148 @@
+# The analytics lab.
+#
+#   postgres             HAPI's database and the analytics database
+#   hapi-fhir            the FHIR server the data is loaded into
+#   pipeline-controller  FHIR Data Pipes. Flattens the views into Postgres.
+#   workspace            the editor, the dashboard build and the lab commands
+#   nginx                the only published service. It terminates HTTPS.
+#
+#   /            a start page
+#   /ide/        the editor
+#   /dashboard/  the Observable Framework dashboard, built after every save
+#   /fhir/       the FHIR server, for reading
+#   :8443        the FHIR Data Pipes Controller UI, on the same address
+#
+# Start it with ./lab-init.sh, which writes .env and the certificate first.
+
+name: analytics-codelab
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: an-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hapi_fhir
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./db/init-db.sql:/docker-entrypoint-initdb.d/01-analytics-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 20
+      start_period: 10s
+    # Nothing here is published. The lab reaches it on the Docker network.
+
+  hapi-fhir:
+    image: hapiproject/hapi:v8.8.0-1
+    container_name: an-hapi
+    restart: unless-stopped
+    environment:
+      - hapi.fhir.mdm_enabled=false
+      - hapi.fhir.bulk_export_enabled=true
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/hapi_fhir
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+      - spring.datasource.driverClassName=org.postgresql.Driver
+      - spring.jpa.properties.hibernate.dialect=ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      - JAVA_TOOL_OPTIONS=-Xmx2g
+    volumes:
+      - ./Healthcheck.class:/healthcheck/Healthcheck.class:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/healthcheck", "Healthcheck"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 90s
+
+  pipeline-controller:
+    # Pin this to a digest once the lab has been tested end to end. latest can
+    # change under the lab.
+    image: us-docker.pkg.dev/cloud-build-fhir/fhir-analytics/main:latest
+    platform: linux/amd64
+    container_name: an-pipeline
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-Xmx3g
+      - FHIRDATA_FHIRSERVERURL=http://hapi-fhir:8080/fhir
+      - FHIRDATA_SINKDBCONFIGPATH=config/postgres-analytics.json
+    volumes:
+      # The ViewDefinitions. The learner edits them in the editor, which has
+      # the same folder, so a save is seen by the next pipeline run.
+      - ./pipeline/config:/app/config:ro
+      - dwh:/dwh
+    depends_on:
+      postgres:
+        condition: service_healthy
+      hapi-fhir:
+        condition: service_healthy
+
+  workspace:
+    build:
+      context: ./workspace
+    image: analytics-codelab-workspace:local
+    container_name: an-workspace
+    init: true
+    restart: unless-stopped
+    environment:
+      PASSWORD: ${IDE_PASSWORD:?Run ./lab-init.sh, which creates the password}
+      IDE_AUTH: ${IDE_AUTH:-password}
+      LAB_URL: ${LAB_URL:?Run ./lab-init.sh, which works out the lab address}
+      LAB_MODE: ${LAB_MODE:-full}
+      LAB_PIPES_URL: ${LAB_PIPES_URL:-}
+      FHIR_URL: http://hapi-fhir:8080/fhir
+      PIPES_URL: http://pipeline-controller:8080
+      PGHOST: postgres
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: analytics
+    volumes:
+      # Docker fills this volume from the image the first time. It brings the
+      # dashboard project and its warm node_modules. Edits survive a restart.
+      - home:/home/learner
+      # The ViewDefinitions, shared with the pipeline controller.
+      - ./pipeline/config:/home/learner/lab/pipeline/config
+      - ./pipeline/views-extra:/home/learner/lab/pipeline/views-extra
+      - ./course-manual.md:/opt/codelab/guide/course-manual.md:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      hapi-fhir:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: an-nginx
+    restart: unless-stopped
+    depends_on:
+      - workspace
+      - pipeline-controller
+    environment:
+      LAB_URL: ${LAB_URL:?Run ./lab-init.sh, which works out the lab address}
+    ports:
+      - "${LAB_HTTP_PORT:-80}:80"
+      - "${LAB_HTTPS_PORT:-443}:443"
+      - "${LAB_PIPES_PORT:-8443}:8443"
+    volumes:
+      - ./nginx/${LAB_NGINX_CONF:-lab-https}.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./nginx/lab-routes.conf:/etc/nginx/lab-routes.conf:ro
+      - ./nginx/html:/srv/www:ro
+      - ./certs:/etc/nginx/certs:ro
+      # Read only, and never used to fill the volume. nginx serves the built
+      # dashboard straight from the learner's checkout.
+      - type: volume
+        source: home
+        target: /srv/home
+        read_only: true
+        volume:
+          nocopy: true
+
+volumes:
+  pgdata:
+  dwh:
+  home:

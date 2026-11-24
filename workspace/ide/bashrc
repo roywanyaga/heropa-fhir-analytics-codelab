@@ -1,0 +1,4 @@
+# Loaded by every terminal in the workspace.
+cd "$CODELAB_DIR" 2>/dev/null || true
+PS1='\[\e[1;32m\]codelab\[\e[0m\] \[\e[1;34m\]\W\[\e[0m\] \$ '
+alias ll='ls -la'

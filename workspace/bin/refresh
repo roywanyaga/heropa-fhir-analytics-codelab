@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Rebuilds the dashboard from the analytics database now.
+# Run it after the pipeline, because the dashboard only reads the tables when
+# it is built.
+exec build-dashboard

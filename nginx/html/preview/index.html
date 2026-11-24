@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    #out { display: none; }
+    /* Always dark, to match the editor these pages sit inside. */
+    :root {
+      color-scheme: dark;
+      --bg: #1b1b1f; --bar: #25252b; --line: #3a3a44; --text: #ececf1; --muted: #a0a0ad;
+      --accent: #bb86fc; --ok: #57c36f; --busy: #e3b341; --bad: #ff7b72; --code: #131316;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
+    header { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: var(--bar); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+    .status { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1 1 140px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+    .ok .dot { background: var(--ok); } .building .dot { background: var(--busy); animation: pulse 1s infinite; } .failed .dot { background: var(--bad); }
+    @keyframes pulse { 50% { opacity: .3; } }
+    #statusText { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    button, .link { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; text-decoration: none; }
+    button:hover, .link:hover { border-color: var(--accent); }
+    button.fresh { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    label { display: flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
+    #app { color-scheme: light dark; flex: 1 1 auto; width: 100%; border: 0; background: #fff; min-height: 120px; }
+    #out { flex: none; border-top: 1px solid var(--line); background: var(--bar); display: flex; flex-direction: column; max-height: 45%; }
+    #out header { border-bottom: 0; padding: 4px 10px; }
+    #out h2 { font-size: 12px; margin: 0; flex: 1; font-weight: 600; }
+    #count { color: var(--muted); font-weight: 400; }
+    #lines { overflow: auto; padding: 0 10px 8px; }
+    #out.closed #lines { display: none; }
+    .entry { border: 1px solid var(--line); border-radius: 6px; margin-top: 6px; background: var(--bg); }
+    .entry summary { cursor: pointer; padding: 4px 8px; font-weight: 600; }
+    .entry.err summary { color: var(--bad); }
+    .entry pre { margin: 0; padding: 8px; background: var(--code); border-top: 1px solid var(--line); overflow: auto; font: 12px/1.45 ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; }
+    .empty { color: var(--muted); padding: 6px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="status" id="status"><span class="dot"></span><span id="statusText">Checking the dashboard build</span></div>
+    <label><input type="checkbox" id="auto" checked> Auto refresh</label>
+    <button id="refresh" type="button">Refresh</button>
+  </header>
+  <iframe id="app" src="/dashboard/" title="The dashboard"></iframe>
+  <section id="out" class="closed">
+    <header>
+      <h2>Output <span id="count"></span></h2>
+      <button id="clear" type="button">Clear</button>
+      <button id="toggle" type="button">Show</button>
+    </header>
+    <div id="lines"><div class="empty">Nothing printed yet. Output from println appears here, and in the Output tab of the Editor, after you click Submit.</div></div>
+  </section>
+<script>
+  // The preview wraps the app in a frame on the same origin. That lets this
+  // page reload the app after a build and copy what the app prints, so a
+  // learner does not need the browser developer tools.
+  const frame = document.getElementById('app');
+  const statusBox = document.getElementById('status');
+  const statusText = document.getElementById('statusText');
+  const refreshButton = document.getElementById('refresh');
+  const auto = document.getElementById('auto');
+  const out = document.getElementById('out');
+  const lines = document.getElementById('lines');
+  const count = document.getElementById('count');
+  const toggle = document.getElementById('toggle');
+  let shownBuild = null;
+  let entries = 0;
+
+  try { auto.checked = localStorage.getItem('codelab-auto') !== 'off'; } catch (e) {}
+  auto.addEventListener('change', () => {
+    try { localStorage.setItem('codelab-auto', auto.checked ? 'on' : 'off'); } catch (e) {}
+  });
+
+  function reloadApp() {
+    refreshButton.classList.remove('fresh');
+    refreshButton.textContent = 'Refresh';
+    frame.src = '/dashboard/?t=' + Date.now();
+  }
+  refreshButton.addEventListener('click', reloadApp);
+
+  function setOpen(open) {
+    out.classList.toggle('closed', !open);
+    toggle.textContent = open ? 'Hide' : 'Show';
+  }
+  toggle.addEventListener('click', () => setOpen(out.classList.contains('closed')));
+  document.getElementById('clear').addEventListener('click', () => {
+    lines.innerHTML = '<div class="empty">Cleared.</div>';
+    entries = 0;
+    count.textContent = '';
+  });
+
+  // Splits a printed line, such as the response from step 5, into a label and
+  // formatted JSON. Anything else is shown as it was printed.
+  // Saved as well in the browser's storage for this lab address, which is
+  // where the Output tab of the editor reads it from.
+  const STORE = 'codelab-output';
+  function save(kind, text) {
+    try {
+      const entries = JSON.parse(localStorage.getItem(STORE) || '[]');
+      entries.push({ at: Date.now(), kind, text });
+      localStorage.setItem(STORE, JSON.stringify(entries.slice(-40)));
+    } catch (e) {}
+  }
+
+  function addEntry(kind, text) {
+    if (/WEBGL_debug_renderer_info|Environment variables are not supported/.test(text)) return;
+    save(kind, text);
+    if (entries === 0) lines.innerHTML = '';
+    entries += 1;
+    count.textContent = '(' + entries + ')';
+    let label = text.length > 80 ? text.slice(0, 80) + ' ...' : text;
+    let body = text;
+    const brace = text.indexOf('{');
+    if (brace > 0 && brace < 60) {
+      try {
+        body = JSON.stringify(JSON.parse(text.slice(brace)), null, 2);
+        label = text.slice(0, brace).replace(/[:\s]+$/, '');
+      } catch (e) {}
+    }
+    const entry = document.createElement('details');
+    entry.className = 'entry' + (kind === 'error' ? ' err' : '');
+    entry.open = true;
+    const summary = document.createElement('summary');
+    summary.textContent = new Date().toLocaleTimeString() + '  ' + label;
+    const pre = document.createElement('pre');
+    pre.textContent = body;
+    entry.append(summary, pre);
+    lines.prepend(entry);
+    setOpen(true);
+  }
+
+  frame.addEventListener('load', () => {
+    try {
+      const win = frame.contentWindow;
+      for (const kind of ['log', 'info', 'warn', 'error']) {
+        const original = win.console[kind];
+        win.console[kind] = (...args) => {
+          original.apply(win.console, args);
+          if (kind !== 'warn') addEntry(kind, args.map(String).join(' '));
+        };
+      }
+      win.addEventListener('error', (event) => addEntry('error', String(event.message)));
+    } catch (e) {}
+  });
+
+  // The VM keeps its own clock zone, so the time is shown in the learner's.
+  const when = (status) => new Date(status.epoch * 1000).toLocaleTimeString();
+
+  async function poll() {
+    try {
+      const response = await fetch('/app-status.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!response.ok) throw new Error('no status yet');
+      const status = await response.json();
+      statusBox.className = 'status ' + status.state;
+      if (status.state === 'building') {
+        statusText.textContent = 'Building since ' + when(status);
+      } else if (status.state === 'failed') {
+        statusText.textContent = 'Build failed at ' + when(status) + '. See the build panel. This is the last working app.';
+      } else if (status.state === 'ok') {
+        statusText.textContent = 'Up to date, built at ' + when(status);
+        if (shownBuild === null) {
+          shownBuild = status.build;
+        } else if (status.build !== shownBuild) {
+          shownBuild = status.build;
+          if (auto.checked) {
+            reloadApp();
+          } else {
+            refreshButton.classList.add('fresh');
+            refreshButton.textContent = 'Refresh for the new build';
+          }
+        }
+      }
+    } catch (e) {
+      statusBox.className = 'status';
+      statusText.textContent = 'Waiting for the first build of the dashboard';
+    }
+  }
+  poll();
+  setInterval(poll, 1500);
+</script>
+</body>
+</html>

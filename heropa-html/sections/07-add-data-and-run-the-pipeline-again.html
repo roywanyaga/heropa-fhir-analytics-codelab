@@ -1,0 +1,28 @@
+<h2>7. Add data and run the pipeline again</h2>
+<ol>
+<li>
+<p>Add about 50 more patients to the FHIR server.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">generate-data --patients 50 --seed 7 --no-demo-family
+</code></pre>
+</li>
+<li>
+<p>Compare the two sides.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">pipeline-status
+</code></pre>
+<p>The FHIR server now holds more patients than the flat tables. The pipeline has not seen them yet.</p>
+</li>
+<li>
+<p>Run only what changed.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline --incremental
+refresh
+</code></pre>
+</li>
+<li>
+<p>Look at the Dashboard tab. The numbers have grown.</p>
+</li>
+</ol>
+<p>You can also add one resource by hand, with the same request a real app makes.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">curl -X POST &quot;$FHIR_URL/Patient&quot; -H &quot;Content-Type: application/fhir+json&quot; \
+  -d '{&quot;resourceType&quot;:&quot;Patient&quot;,&quot;gender&quot;:&quot;female&quot;,&quot;birthDate&quot;:&quot;2024-03-02&quot;,&quot;name&quot;:[{&quot;family&quot;:&quot;TEST&quot;,&quot;given&quot;:[&quot;Lab&quot;]}]}'
+</code></pre>
+<p>The patient has none of the location tags the other patients carry, so the tables count it but the village based queries do not.</p>

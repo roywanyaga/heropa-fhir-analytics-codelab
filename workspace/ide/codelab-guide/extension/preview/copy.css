@@ -1,0 +1,33 @@
+/* The Copy button on each code block of the rendered manual. */
+
+pre.codelab-has-copy {
+  position: relative;
+}
+
+.codelab-copy {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 2px 8px;
+  font-family: var(--vscode-font-family, sans-serif);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--vscode-button-secondaryForeground, #ffffff);
+  background: var(--vscode-button-secondaryBackground, #3a3d41);
+  border: 1px solid var(--vscode-widget-border, transparent);
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.codelab-copy:hover,
+.codelab-copy:focus {
+  opacity: 1;
+  background: var(--vscode-button-secondaryHoverBackground, #45494e);
+}
+
+.codelab-copy.codelab-copied {
+  opacity: 1;
+  color: var(--vscode-button-foreground, #ffffff);
+  background: var(--vscode-button-background, #0e639c);
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Puts the ViewDefinitions back as the lab shipped them.
+set -euo pipefail
+dest="$CODELAB_DIR/pipeline/config/views"
+cp -f /opt/codelab/pristine/views/*.json "$dest"/
+echo "The ViewDefinitions in $dest are back to the lab's own."
+echo "Run run-pipeline to apply them."

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Builds the dashboard into dashboard/dist, where nginx serves it.
+# Called by the save watcher and by refresh. One build runs at a time.
+set -uo pipefail
+STATE="$HOME/.codelab"; mkdir -p "$STATE"
+exec 9>"$STATE/build.lock"
+flock 9
+
+LOG="$HOME/build.log"
+status() { # state
+  printf '{"state":"%s","epoch":%s,"build":%s}\n' "$1" "$(date +%s)" "$(cat "$STATE/n" 2>/dev/null || echo 0)" > "$STATE/status.json.tmp"
+  mv "$STATE/status.json.tmp" "$STATE/status.json"
+}
+n=$(( $(cat "$STATE/n" 2>/dev/null || echo 0) + 1 )); echo "$n" > "$STATE/n"
+status building
+
+cd "$CODELAB_DIR/dashboard"
+bash scripts/clear_data_cache.sh
+
+# Use the database when the pipeline has filled it, and the sample data until then.
+if psql -X -q -w -t -A -c "SELECT 1 FROM patient_flat LIMIT 1" 2>/dev/null | grep -q 1; then
+  export LAB_SAMPLE=0
+  echo "[$(date +%T)] Building the dashboard from the analytics database" >> "$LOG"
+else
+  export LAB_SAMPLE=1
+  echo "[$(date +%T)] The pipeline has not filled the tables yet, so the dashboard shows sample data" >> "$LOG"
+fi
+
+if npx observable build >> "$LOG" 2>&1; then
+  echo "[$(date +%T)] BUILD OK" >> "$LOG"
+  status ok
+else
+  echo "[$(date +%T)] BUILD FAILED. The Dashboard tab keeps the last good build. Read the lines above for the cause." >> "$LOG"
+  status failed
+  exit 1
+fi

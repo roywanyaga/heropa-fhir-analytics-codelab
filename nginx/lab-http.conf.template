@@ -1,0 +1,33 @@
+# The front for a local test on localhost, chosen by LAB_CERT=none. It serves
+# the lab over plain HTTP. Browsers treat http://localhost as a secure page, so
+# the editor works without any certificate. It is never used on Heropa.
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ""      close;
+}
+
+server {
+    listen 80;
+    server_name _;
+
+    include /etc/nginx/lab-routes.conf;
+}
+
+# The FHIR Data Pipes controller has no sign-in of its own and its pages use
+# links from the root, so it gets a port of its own on the same name.
+# Its UI starts pipeline runs, so only a lab VM behind the inbound rules should
+# publish it.
+server {
+    listen 8443;
+    server_name _;
+
+    location / {
+        resolver 127.0.0.11 valid=10s ipv6=off;
+        set $pipes http://pipeline-controller:8080;
+        proxy_pass $pipes;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;
+    }
+}

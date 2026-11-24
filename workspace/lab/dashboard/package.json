@@ -1,0 +1,16 @@
+{
+  "name": "analytics-codelab-dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "observable preview --host 0.0.0.0",
+    "build": "bash scripts/clear_data_cache.sh && observable build",
+    "sample": "LAB_SAMPLE=1 observable build"
+  },
+  "dependencies": {
+    "@observablehq/framework": "1.13.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,11 @@
+gender,age_group,patients
+female,0-4,37
+male,0-4,42
+female,5-14,42
+male,5-14,45
+female,15-24,30
+male,15-24,24
+female,25-49,48
+male,25-49,55
+female,50+,14
+male,50+,18

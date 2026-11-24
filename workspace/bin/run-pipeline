@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Starts the FHIR Data Pipes pipeline and, with --wait (the default), follows
+# it until the flat tables hold what the FHIR server holds.
+#
+#   run-pipeline                full run, then wait
+#   run-pipeline --incremental  only what changed since the last run
+#   run-pipeline --no-wait      start it and return
+#
+# The Controller UI does the same with its Run buttons.
+set -euo pipefail
+MODE=FULL WAIT=1
+for a in "$@"; do
+  case "$a" in
+    --incremental) MODE=INCREMENTAL ;;
+    --no-wait)     WAIT=0 ;;
+    --wait)        WAIT=1 ;;
+    *) echo "Unknown option $a" >&2; exit 2 ;;
+  esac
+done
+
+fhir_count() {
+  curl -fsS "$FHIR_URL/$1?_summary=count" | jq -r '.total'
+}
+table_count() {
+  psql -X -t -A -c "SELECT count(DISTINCT id) FROM $1" 2>/dev/null || echo 0
+}
+
+want="$(fhir_count Patient)"
+echo "The FHIR server holds $want Patient resources."
+echo "Starting a $MODE run..."
+# Not yet checked against a running controller. The Controller UI posts the
+# same request, so if this fails, copy it from the browser's network tab.
+curl -fsS -X POST "$PIPES_URL/run?runMode=$MODE" >/dev/null \
+  || { echo "The controller did not accept the run. Is it up? Open the Pipelines address." >&2; exit 1; }
+
+(( WAIT )) || { echo "Started. Follow it in the Pipelines tab."; exit 0; }
+
+for i in $(seq 1 240); do
+  have="$(table_count patient_flat)"
+  printf '  patient_flat: %s of %s patients\r' "$have" "$want"
+  if [[ "$have" -ge "$want" && "$want" -gt 0 ]]; then
+    echo
+    echo "The flat tables are up to date."
+    echo "Now run refresh to rebuild the dashboard."
+    exit 0
+  fi
+  sleep 5
+done
+echo
+echo "Still running after 20 minutes. Follow it in the Pipelines tab." >&2
+exit 1

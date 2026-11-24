@@ -1,0 +1,7 @@
+# Flink runner configuration for FHIR Data Pipes pipeline.
+# Sourced from upstream fhir-data-pipes/docker/config/flink-conf.yaml.
+
+taskmanager.memory.network.max: 256mb
+taskmanager.memory.managed.size: 256mb
+execution.attached: false
+execution.job-listeners: com.google.fhir.analytics.metrics.FlinkJobListener

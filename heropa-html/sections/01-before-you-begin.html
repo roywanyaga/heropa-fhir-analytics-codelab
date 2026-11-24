@@ -1,0 +1,16 @@
+<h2>1. Before you begin</h2>
+<h3>What you'll build</h3>
+<p>You will follow FHIR data from a FHIR server, through a pipeline, into flat database tables, and onto a dashboard. Along the way you change a ViewDefinition and a data query, add more data, and see each change reach the dashboard.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">FHIR server (HAPI) --&gt; FHIR Data Pipes --&gt; flat tables (Postgres) --&gt; dashboard (Observable Framework)
+                        ViewDefinitions                              SQL data loaders
+</code></pre>
+<h3>What you'll learn</h3>
+<ul>
+<li>What a ViewDefinition is and how it turns a FHIR resource into a table</li>
+<li>How to run the pipeline from the Controller UI and from the terminal</li>
+<li>How an Observable Framework dashboard reads those tables with data loaders</li>
+<li>How to change a ViewDefinition and see the effect on the dashboard</li>
+<li>How to add data to the FHIR server and bring it through the pipeline</li>
+</ul>
+<h3>What you'll need</h3>
+<p>A recent version of Chrome, Edge, Firefox or Safari, and a keyboard. You do not need to know JavaScript. Each change is given in full, with the file to open and where to put it. A little SQL helps.</p>

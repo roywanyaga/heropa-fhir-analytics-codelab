@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# What the FHIR server holds and what the flat tables hold, side by side.
+set -uo pipefail
+printf '%-28s %10s %12s\n' "" "FHIR server" "flat table"
+row() { # FHIR type, table
+  local f t
+  f="$(curl -fsS "$FHIR_URL/$1?_summary=count" 2>/dev/null | jq -r '.total // "?"')"
+  t="$(psql -X -t -A -c "SELECT count(DISTINCT id) FROM $2" 2>/dev/null || echo "none")"
+  printf '%-28s %10s %12s\n' "$1" "$f" "${t:-none}"
+}
+row Patient patient_flat
+row Group group_flat
+row Encounter encounter_flat
+row Condition condition_flat
+row Immunization immunization_flat
+row Observation observation_flat

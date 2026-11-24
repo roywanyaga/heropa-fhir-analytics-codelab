@@ -1,0 +1,8 @@
+<h2>8. Congratulations!</h2>
+<p style="border-left: 4px solid #2e7d32; background: #e8f5e9; padding: 8px 12px;">You followed FHIR data from a server to a dashboard, changed a ViewDefinition and a query, and brought new data through the pipeline.</p>
+<h3>Next steps</h3>
+<ul>
+<li>Switch on the three views in <code>pipeline/views-extra</code>. Copy one into <code>pipeline/config/views</code>, add its resource type to <code>resourceList</code> in <code>pipeline/config/application.yaml</code>, and restart the controller with <code>docker restart an-pipeline</code> from the VM terminal.</li>
+<li>Write a new loader for another table, such as <code>observation_flat</code>, and a chart for it on a new page.</li>
+<li>Read the indicator queries in <code>data/indicators.sql</code>. They show how the OHS Player reference dashboards join the flat tables.</li>
+</ul>

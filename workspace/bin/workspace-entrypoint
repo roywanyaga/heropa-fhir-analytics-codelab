@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Starts what a learner needs: the save watcher, the one-time seed, and the
+# editor, which is code-server.
+set -euo pipefail
+
+AUTH="${IDE_AUTH:-password}"
+case "$AUTH" in
+    password) [[ -n "${PASSWORD:-}" ]] || { echo "PASSWORD is not set. Start the lab with lab-init.sh." >&2; exit 1; } ;;
+    none)     echo "IDE_AUTH is none, so the editor asks for no password." >&2 ;;
+    *)        echo "IDE_AUTH must be password or none, not $AUTH." >&2; exit 1 ;;
+esac
+
+# A volume filled by an older image may hold an older guide extension.
+code-server --install-extension /opt/codelab/codelab-guide.vsix --force >/dev/null 2>&1 || true
+
+mkdir -p "$HOME/.codelab"
+: > "$HOME/build.log"
+
+( while true; do codelab-watch >> "$HOME/build.log" 2>&1 || true
+    echo "The build watcher stopped and is starting again." >> "$HOME/build.log"; sleep 2; done ) &
+( [[ -f "$HOME/.codelab/seeded" ]] || lab-seed ) &
+
+exec code-server \
+    --bind-addr 0.0.0.0:8080 \
+    --auth "$AUTH" \
+    --disable-telemetry \
+    --disable-update-check \
+    --disable-workspace-trust \
+    --app-name "FHIR analytics codelab" \
+    "$CODELAB_DIR"
