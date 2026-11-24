@@ -174,11 +174,18 @@
 </code></pre>
 </li>
 <li>
-<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Search.</strong> Everything after the question mark is a search parameter. Try these.</p>
+<p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Search.</strong> Everything after the question mark is a search parameter. Try these one at a time, each as its own address.</p>
+<p>Count only the female patients.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?gender=female&amp;_summary=count
-/fhir/Patient?birthdate=ge2022-01-01&amp;_count=5
-/fhir/Encounter?_count=2
-/fhir/Immunization?_summary=count
+</code></pre>
+<p>List five patients born in 2022 or later.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Patient?birthdate=ge2022-01-01&amp;_count=5
+</code></pre>
+<p>Look at two encounters, which are visits.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Encounter?_count=2
+</code></pre>
+<p>Count the vaccine doses.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">/fhir/Immunization?_summary=count
 </code></pre>
 </li>
 <li>

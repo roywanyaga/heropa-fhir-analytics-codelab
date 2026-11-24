@@ -119,12 +119,29 @@ The addresses below all start with the address of your lab. The quickest way to 
    /fhir/Patient/<the id>
    ```
 
-4. **Search.** Everything after the question mark is a search parameter. Try these.
+4. **Search.** Everything after the question mark is a search parameter. Try these one at a time, each as its own address.
+
+   Count only the female patients.
 
    ```
    /fhir/Patient?gender=female&_summary=count
+   ```
+
+   List five patients born in 2022 or later.
+
+   ```
    /fhir/Patient?birthdate=ge2022-01-01&_count=5
+   ```
+
+   Look at two encounters, which are visits.
+
+   ```
    /fhir/Encounter?_count=2
+   ```
+
+   Count the vaccine doses.
+
+   ```
    /fhir/Immunization?_summary=count
    ```
 
