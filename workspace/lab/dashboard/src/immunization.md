@@ -19,7 +19,7 @@ const totals = d3.rollups(vaccines, (v) => d3.sum(v, (d) => d.doses), (d) => d.v
     <h1>Immunization</h1>
     <p class="sub">Vaccine doses recorded as Immunization resources</p>
   </div>
-  <nav class="tabs"><a href="./">Overview</a><a class="on" href="./immunization">Immunization</a></nav>
+  <nav class="tabs"><a href="./index.html">Overview</a><a class="on" href="./immunization.html">Immunization</a></nav>
 </div>
 
 <p class="fresh">Built ${built}</p>

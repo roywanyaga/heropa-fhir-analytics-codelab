@@ -10,6 +10,8 @@ export default {
   ],
   style: "style.css",
   footer: "Open Health Stack Software Foundation. Built from the analytics database that FHIR Data Pipes fills.",
+  // The built site is served as plain files, so a page is /immunization.html.
+  cleanUrls: false,
   sidebar: false,
   toc: false,
   pager: false,

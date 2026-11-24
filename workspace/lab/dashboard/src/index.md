@@ -22,7 +22,7 @@ const accents = [];
     <h1>Community health overview</h1>
     <p class="sub">Synthetic data, read from the flat tables FHIR Data Pipes writes to Postgres</p>
   </div>
-  <nav class="tabs"><a class="on" href="./">Overview</a><a href="./immunization">Immunization</a></nav>
+  <nav class="tabs"><a class="on" href="./index.html">Overview</a><a href="./immunization.html">Immunization</a></nav>
 </div>
 
 <p class="fresh">Built ${built}</p>
