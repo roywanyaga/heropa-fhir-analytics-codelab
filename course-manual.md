@@ -13,7 +13,7 @@ The Editor has these areas.
 | Terminal | Top left | For typing commands. Open another with Ctrl and the backtick key. |
 | Pipeline log | Bottom left | What the data load, the pipeline and the dashboard build report |
 | Guide | Right | This guide. It shows one step at a time. Use **Back** and **Next**, or the list at the top. |
-| Explorer | Far left, when you open it | The files |
+| Explorer | Far left | The files |
 
 The files you will meet.
 
