@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Turns course-manual.md into HTML to paste into a Heropa course.
+"""Turns heropa-intro.md and course-manual.md into HTML to paste into a Heropa course.
+
+Steps 1 and 2 are done in Heropa and live in heropa-intro.md. Steps 3 to the
+end are done in the Editor and live in course-manual.md, which the Editor shows
+one step at a time. The Heropa course carries all of them, so the two files are
+joined here.
 
 Heropa's editor keeps inline styles and drops classes and stylesheets, so
 every style is written on the element itself. The output goes to heropa-html,
@@ -23,7 +28,7 @@ import sys
 from markdown_it import MarkdownIt
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "course-manual.md"
+SOURCES = [ROOT / "heropa-intro.md", ROOT / "course-manual.md"]
 OUT = ROOT / "heropa-html"
 
 TABLE = "border-collapse: collapse; width: 100%; margin-bottom: 16px;"
@@ -122,7 +127,11 @@ def slug(title):
 
 
 def main():
-    page = convert(SOURCE.read_text(encoding="utf-8"))
+    intro, manual = (path.read_text(encoding="utf-8") for path in SOURCES)
+    # The Editor guide opens with its own logo and title. In the course those
+    # come once, from the introduction, so the manual joins from its first step.
+    manual = manual[manual.index("## 3."):]
+    page = convert(intro.rstrip() + "\n\n" + manual)
 
     if OUT.exists():
         shutil.rmtree(OUT)

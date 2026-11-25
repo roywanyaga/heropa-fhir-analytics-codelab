@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.1.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+<PackageManifest Version="2.2.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
   <Metadata>
-    <Identity Language="en-US" Id="codelab-guide" Version="2.1.0" Publisher="ohs" />
+    <Identity Language="en-US" Id="codelab-guide" Version="2.2.0" Publisher="ohs" />
     <DisplayName>Codelab guide</DisplayName>
     <Description xml:space="preserve">Lays out the dashboard code, the pipeline log, a terminal and the course manual when the editor opens.</Description>
     <Categories>Other</Categories>

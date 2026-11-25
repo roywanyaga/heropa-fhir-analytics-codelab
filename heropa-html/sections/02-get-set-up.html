@@ -5,9 +5,13 @@
 <p>Open the terminal of your lab VM in Heropa.</p>
 </li>
 <li>
-<p>Start the lab.</p>
+<p>Go to the lab folder.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">cd ~/analytics-codelab
-./lab-init.sh
+</code></pre>
+</li>
+<li>
+<p>Start the lab.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">./lab-init.sh
 </code></pre>
 </li>
 <li>
@@ -59,77 +63,6 @@
 </tr>
 </tbody>
 </table>
-<p>The Editor has these areas.</p>
-<table style="border-collapse: collapse; width: 100%; margin-bottom: 16px;">
-<thead>
-<tr>
-<th style="border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;">Area</th>
-<th style="border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;">Where</th>
-<th style="border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;">What it is for</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;">Explorer</td>
-<td style="border: 1px solid #333; padding: 8px;">Far left</td>
-<td style="border: 1px solid #333; padding: 8px;">The files</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;">Code</td>
-<td style="border: 1px solid #333; padding: 8px;">Top centre</td>
-<td style="border: 1px solid #333; padding: 8px;">The file you are changing</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;">Terminal</td>
-<td style="border: 1px solid #333; padding: 8px;">Bottom centre</td>
-<td style="border: 1px solid #333; padding: 8px;">For typing commands. Open another with Ctrl and the backtick key.</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;">Pipeline log</td>
-<td style="border: 1px solid #333; padding: 8px;">Bottom centre, next to the Terminal</td>
-<td style="border: 1px solid #333; padding: 8px;">What the data load, the pipeline and the dashboard build report</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;">Guide</td>
-<td style="border: 1px solid #333; padding: 8px;">Right</td>
-<td style="border: 1px solid #333; padding: 8px;">This guide</td>
-</tr>
-</tbody>
-</table>
+<p>The Editor opens with the Terminal on the left, the Pipeline log under it, and this guide on the right, one step at a time. From here on the guide is inside the Editor. Step 3 starts there.</p>
 <h3 style="color: #43799b;">Find your addresses again</h3>
 <p>Come back here after a break, or when a tab stops loading. Start the VM in Heropa if it is stopped, reload the tabs, and if they do not load run <code>./lab-init.sh</code> again in <code>~/analytics-codelab</code>. It is safe at any time and your changes are kept. <code>./lab-init.sh --info</code> prints the addresses and the password without changing anything.</p>
-<h3 style="color: #43799b;">The files</h3>
-<table style="border-collapse: collapse; width: 100%; margin-bottom: 16px;">
-<thead>
-<tr>
-<th style="border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;">Path</th>
-<th style="border: 1px solid #4b3a8c; padding: 8px; text-align: left; background: #4b3a8c; color: #ffffff;">What it holds</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>pipeline/config/views/</code></td>
-<td style="border: 1px solid #333; padding: 8px;">The ViewDefinitions. One JSON file for each FHIR resource type. The pipeline reads these.</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>pipeline/views-extra/</code></td>
-<td style="border: 1px solid #333; padding: 8px;">Three more ViewDefinitions that are not switched on</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>dashboard/src/data/</code></td>
-<td style="border: 1px solid #333; padding: 8px;">The data loaders. Each one is a SQL query that prints a CSV.</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>dashboard/src/index.md</code> and <code>immunization.md</code></td>
-<td style="border: 1px solid #333; padding: 8px;">The two dashboard pages</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>dashboard/src/components/charts.js</code></td>
-<td style="border: 1px solid #333; padding: 8px;">Chart helpers shared by the pages</td>
-</tr>
-<tr>
-<td style="border: 1px solid #333; padding: 8px;"><code>data/generate.py</code></td>
-<td style="border: 1px solid #333; padding: 8px;">The synthetic data generator</td>
-</tr>
-</tbody>
-</table>

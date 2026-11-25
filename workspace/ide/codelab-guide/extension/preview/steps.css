@@ -1,0 +1,83 @@
+/* The step bar of the rendered manual, and the class that hides the steps
+   that are not on screen. */
+
+.codelab-step-hidden {
+  display: none !important;
+}
+
+body.codelab-stepped {
+  padding-top: 46px;
+}
+
+.codelab-step-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-family: var(--vscode-font-family, sans-serif);
+  font-size: 12px;
+  color: var(--vscode-foreground, #cccccc);
+  background: var(--vscode-editor-background, #1e1e1e);
+  border-bottom: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.35));
+}
+
+.codelab-step-bar select {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 3px 4px;
+  font: inherit;
+  color: var(--vscode-dropdown-foreground, #f0f0f0);
+  background: var(--vscode-dropdown-background, #3c3c3c);
+  border: 1px solid var(--vscode-dropdown-border, transparent);
+  border-radius: 3px;
+}
+
+.codelab-step-count {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.codelab-step-foot {
+  display: flex;
+  justify-content: space-between;
+  margin: 28px 0 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.35));
+}
+
+body.codelab-stepped-all .codelab-step-foot {
+  display: none;
+}
+
+.codelab-step-ui button {
+  flex: 0 0 auto;
+  padding: 3px 12px;
+  font-family: var(--vscode-font-family, sans-serif);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--vscode-button-foreground, #ffffff);
+  background: var(--vscode-button-background, #0e639c);
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.codelab-step-ui button:hover:not(:disabled) {
+  background: var(--vscode-button-hoverBackground, #1177bb);
+}
+
+.codelab-step-ui button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.codelab-step-ui button.codelab-step-all {
+  color: var(--vscode-button-secondaryForeground, #ffffff);
+  background: var(--vscode-button-secondaryBackground, #3a3d41);
+}

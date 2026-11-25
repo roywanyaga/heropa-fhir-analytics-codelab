@@ -1,8 +1,8 @@
 {
   "name": "codelab-guide",
   "displayName": "Codelab guide",
-  "description": "Lays out the dashboard code, the pipeline log, a terminal and the course manual when the editor opens.",
-  "version": "2.1.0",
+  "description": "Lays out a terminal, the pipeline log and the course guide, one step at a time, when the editor opens.",
+  "version": "2.2.0",
   "publisher": "ohs",
   "engines": {
     "vscode": "^1.80.0"
@@ -50,10 +50,12 @@
       }
     ],
     "markdown.previewScripts": [
-      "./preview/copy.js"
+      "./preview/copy.js",
+      "./preview/steps.js"
     ],
     "markdown.previewStyles": [
-      "./preview/copy.css"
+      "./preview/copy.css",
+      "./preview/steps.css"
     ]
   }
 }

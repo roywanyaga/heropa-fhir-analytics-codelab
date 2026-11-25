@@ -35,7 +35,9 @@
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">run-pipeline
 </code></pre>
 <h3 style="color: #43799b;">Look at the tables</h3>
+<p>List the tables.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">psql -c &quot;\dt&quot;
-psql -c &quot;SELECT gender, count(DISTINCT id) FROM patient_flat GROUP BY gender&quot;
 </code></pre>
-<p>The connection settings are already in your terminal. Notice the <code>\dt</code> with a backslash.</p>
+<p>The connection settings are already in your terminal. Notice the <code>\dt</code> with a backslash. Then count the patients by gender.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">psql -c &quot;SELECT gender, count(DISTINCT id) FROM patient_flat GROUP BY gender&quot;
+</code></pre>

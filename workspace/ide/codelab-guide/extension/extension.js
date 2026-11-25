@@ -1,8 +1,8 @@
 // Lays the editor out for the analytics codelab.
 //
-//   left, top      the dashboard code, the ViewDefinitions and the data loaders
-//   left, bottom   the pipeline log, with a terminal in a tab next to it
-//   right          the course manual, rendered, at full height
+//   left, top      a terminal, where the learner types the commands
+//   left, bottom   the pipeline log
+//   right          the course guide, rendered, one step at a time
 //
 // VS Code has no setting that opens files or pages when it starts, so this
 // small extension does it. The manual uses the Markdown preview that ships
@@ -26,7 +26,6 @@ const fs = require('fs');
 const { execFile } = require('child_process');
 
 const GUIDE = process.env.CODELAB_GUIDE || '/opt/codelab/guide/course-manual.md';
-const APP_FILE = (process.env.CODELAB_DIR || '') + '/dashboard/src/index.md';
 const LAB_URL = (process.env.LAB_URL || '').replace(/\/+$/, '');
 const REDUCED = process.env.LAB_MODE === 'reduced';
 const GUIDE_EDITOR = 'vscode.markdown.preview.editor';
@@ -43,7 +42,7 @@ const TERMINAL = 'Terminal';
 const COLUMN = { code: 1, build: 2, guide: 3 };
 const LAYOUT = {
   orientation: 0,
-  groups: [{ size: 0.6, groups: [{ size: 0.66 }, { size: 0.34 }] }, { size: 0.4 }],
+  groups: [{ size: 0.55, groups: [{ size: 0.7 }, { size: 0.3 }] }, { size: 0.45 }],
 };
 
 function anyTab(test) {
@@ -115,13 +114,10 @@ async function arrange(want) {
   const needTerminal = want.terminal && !terminalIsOpen();
   if (!needGuide && !needBuild && !needOutput && !needTerminal) return;
 
-  if (!vscode.window.activeTextEditor && fs.existsSync(APP_FILE)) {
-    await vscode.window.showTextDocument(vscode.Uri.file(APP_FILE), { viewColumn: COLUMN.code, preview: false });
-  }
   await vscode.commands.executeCommand('vscode.setEditorLayout', LAYOUT);
 
-  // Tabs line up in the order they are made, which is build log, output,
-  // then terminal.
+  // The terminal takes the top left pane and the pipeline log the pane under
+  // it. Files the learner opens later join the terminal's pane.
   let buildPanel;
   if (needBuild) {
     buildPanel = openPage(BUILD);
@@ -130,7 +126,7 @@ async function arrange(want) {
     openPage(OUTPUT);
   }
   if (needTerminal) {
-    vscode.window.createTerminal({ name: TERMINAL, location: { viewColumn: COLUMN.build, preserveFocus: true } });
+    vscode.window.createTerminal({ name: TERMINAL, location: { viewColumn: COLUMN.code, preserveFocus: false } });
   }
   if (needGuide && REDUCED) {
     await vscode.window.showTextDocument(vscode.Uri.file(GUIDE), {
@@ -144,10 +140,10 @@ async function arrange(want) {
       preserveFocus: true,
     });
   }
-  if (buildPanel && (needTerminal || needOutput)) {
-    // The tabs made after the build log cover it, and the terminal takes a
-    // moment to appear. The build log is the tab a learner should see first.
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+  if (buildPanel && needOutput) {
+    // The output tab is made after the build log and covers it. The build log
+    // is the tab a learner should see first.
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     buildPanel.reveal(COLUMN.build, true);
   }
   await vscode.commands.executeCommand('workbench.action.focusFirstEditorGroup');

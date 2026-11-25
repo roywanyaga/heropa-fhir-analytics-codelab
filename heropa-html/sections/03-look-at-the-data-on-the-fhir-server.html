@@ -41,7 +41,9 @@
 <li>
 <p style="border-left: 4px solid #4a90d9; background: #eef5fc; padding: 8px 12px;"><strong>Count from the terminal.</strong> Switch to the Editor and open the Terminal. The lab sets <code>FHIR_URL</code> for you.</p>
 <pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">curl -s &quot;$FHIR_URL/Patient?_summary=count&quot; | jq .total
-curl -s &quot;$FHIR_URL/Encounter?_summary=count&quot; | jq .total
+</code></pre>
+<p>Then the encounters.</p>
+<pre style="background: #f6f8fa; border: 1px solid #ddd; padding: 12px; overflow-x: auto; white-space: pre;"><code style="white-space: pre; font-family: monospace;">curl -s &quot;$FHIR_URL/Encounter?_summary=count&quot; | jq .total
 </code></pre>
 </li>
 </ol>
