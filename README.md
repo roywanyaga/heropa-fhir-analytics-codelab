@@ -54,15 +54,18 @@ The ViewDefinitions in `pipeline/config/views` are the ones from `ohs-player-ana
 
 Do these in order. Each command is on its own, so run them one at a time. The names are the ones used for the first course; change them if you like, but keep them consistent.
 
-### 1. Create the build environment
+### 1. Create the build template and environment
 
-1. In Heropa open **Environments** and click **Add**. Choose an Ubuntu 24.04 VM image and name the environment `FHIR Analytics Draft`.
-2. Edit the VM.
+Set the network on a template first, as the data capture codelab does. When it was set on the environment instead, the saved template showed no public IP, and the console of every course copy dropped as Heropa assigned one at launch.
+
+1. In Heropa open **Templates** and click **Add**. Name it `FHIR Analytics build`, pick the region, and click **Create**.
+2. On its **Resources** tab click **Add Resource** and add the Ubuntu 24.04 VM image.
+3. Edit the VM.
    * Instance type: `t3.large` (2 vCPU, 8 GB memory, 10 VLU an hour). This is what the first course used and it ran the lab.
-   * Storage: 20 GB. This is the most the account allowed. A bigger disk is better if you can have it, because the images take about 7 GB, the workspace build needs the same again while it runs, and the data grows. **The size cannot be changed once the template is saved.**
+   * Storage: 20 GB. This is the most the account allowed. A bigger disk is better if you can have it, because the images take about 7 GB, the workspace build needs the same again while it runs, and the data grows. **The size cannot be changed once the final template is saved.**
    * Connection type: SSH. Username `ubuntu`.
-3. Open **Edit network** for the VM. Allocate a permanent public IP and add inbound TCP rules for 80, 443 and 8443 from `0.0.0.0/0`. Port 80 is for the Let's Encrypt check. Without a permanent IP the addresses change on every restart.
-4. Launch the environment and open its terminal.
+4. Open the row action menu of the VM and choose **Edit network**. Tick **Allocate a permanent public IP address**. Add inbound TCP rules for 80, 443 and 8443 from `0.0.0.0/0`. Port 80 is for the Let's Encrypt check. Leave outbound traffic allowed.
+5. Launch an environment from this template, name it `FHIR Analytics Draft`, and open its terminal.
 
 ### 2. Put the lab on the VM
 
@@ -137,7 +140,7 @@ The template then holds the FHIR data and empty flat tables. Stop the environmen
 
 ### 5. Save the template
 
-1. In the environment, open **Action** and choose **Save as template**. Name it `FHIR Analytics`. Add a version to the name when you make another one, such as `FHIR Analytics v2`.
+1. In the environment, open **Action** and choose **Save as template**. Name it `FHIR Analytics`. When it is Available, open it and check its VM shows a public IP and not N/A. Add a version to the name when you make another one, such as `FHIR Analytics v2`.
 2. Wait until the template is **Available**. It takes about 30 minutes. Heropa clones the VM, its disk and its configuration (instance type, storage, network, connection type, credentials and user data). It does not copy the running state.
 3. Do not launch the environment that was saved. A copy of it, also named `FHIR Analytics`, may exist after the template is made. It is not used by the course and can be deleted.
 4. Stop the `FHIR Analytics Draft` environment so it stops using VLUs.
